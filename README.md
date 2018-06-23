@@ -1,2 +1,2 @@
 # kYNAB
-A Kotlin project for interacting with the YNAB (You Need A Budget) API.
+A Kotlin interface to the YNAB (You Need A Budget) API.
