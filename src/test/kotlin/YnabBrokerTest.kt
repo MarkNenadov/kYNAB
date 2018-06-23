@@ -1,12 +1,10 @@
 import org.junit.Test
 
 class YnabBrokerTest {
-    val TESTING_ACCESS_TOKEN = "put your token here"
     val TESTING_BUDGET_ID = "put a budget id here"
     val TESTING_CATEGORY_ID = "put a category id here"
 
-    val ynabBroker = YnabBroker( YnabConfiguration( TESTING_ACCESS_TOKEN ) )
-
+    val ynabBroker = YnabBroker( YnabConfiguration() )
     @Test
     fun testGetBudgetSummaries() {
         val budgets = ynabBroker.getBudgetSummaries()
