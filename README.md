@@ -8,4 +8,4 @@ A Kotlin interface to the YNAB (You Need A Budget) API.
 
 ### Getting Started
 
-In order to begin, you must get a Personal Access Token from YNAB and then put it into personal_access_token.yaml.
+In order to begin, you must get a Personal Access Token from YNAB and then put it into config yaml (in the personal_access_token property)
