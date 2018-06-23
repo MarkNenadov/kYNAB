@@ -4,8 +4,6 @@ import budget.*
 import budget.category.YnabBudgetCategory
 import budget.category.YnabCategoryHistory
 import khttp.get
-import org.json.JSONArray
-import org.json.JSONObject
 
 class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
     override fun getBudgetSummaries() : MutableList<YnabBudgetSummary> {
@@ -18,7 +16,7 @@ class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
         return result
     }
 
-    override fun getBudget( ynabId: String ): YnabBudget {
+    override fun getBudgetById(ynabId: String ): YnabBudget {
         val responseData : JsonObject? = getFromYnab("budgets/" + ynabId ).data
 
         if ( responseData == null ) {
@@ -30,8 +28,20 @@ class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
         return YnabBudget( result )
     }
 
+    override fun getBudgetByName(name: String): YnabBudget {
+        var budgetId : String = "";
+        for(budgetSummary in getBudgetSummaries()) {
+            if ( budgetSummary.name == name ) {
+                budgetId = budgetSummary.ynabId
+            }
+        }
+
+        return getBudgetById( budgetId )
+    }
+
+
     override fun getOverBudgetCategories( budgetYnabId: String): List<YnabBudgetCategory> {
-        val budget = getBudget( budgetYnabId )
+        val budget = getBudgetById( budgetYnabId )
 
         // TODO: Make this real, not just a hardcoded month
         return budget.budgetMonths[1].categories.filter { category -> category.isOverBudget() }
@@ -40,7 +50,7 @@ class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
     override fun getCategoryHistory(budgetYnabId: String, categoryYnabId: String): YnabCategoryHistory {
         val categoryHistory = YnabCategoryHistory()
 
-        val budget = getBudget( budgetYnabId )
+        val budget = getBudgetById( budgetYnabId )
 
         for ( category in budget.getCategoriesForAllMonths() ) {
             if ( category.ynabId == categoryYnabId ) {
@@ -59,7 +69,7 @@ class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
     override fun getTransactionsByMemo(budgetYnabId: String, memoText: String): List<YnabTransaction> {
         val matchingTransactions : MutableList<YnabTransaction> = mutableListOf()
 
-        val budget = getBudget( budgetYnabId )
+        val budget = getBudgetById( budgetYnabId )
 
         for( currentTransaction in budget.transactions ) {
             if ( currentTransaction.memoContains( memoText ) ) {
