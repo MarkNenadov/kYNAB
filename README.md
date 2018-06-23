@@ -9,3 +9,15 @@ A Kotlin interface to the YNAB (You Need A Budget) API.
 ### Getting Started
 
 In order to begin, you must get a Personal Access Token from YNAB and then put it into config yaml (in the personal_access_token property)
+
+### The YnabBroker API
+
+```
+interface YnabBroker {
+    fun getBudgetSummaries() : MutableList<YnabBudgetSummary>
+    fun getBudget( ynabId: String ): YnabBudget
+    fun getOverBudgetCategories( budgetYnabId: String): List<YnabBudgetCategory>
+    fun getCategoryHistory(budgetYnabId: String, categoryYnabId: String): YnabCategoryHistory
+    fun getTransactionsByMemo(budgetYnabId: String, memoText: String): List<YnabTransaction>
+}
+```

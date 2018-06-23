@@ -4,7 +4,7 @@ class YnabBrokerTest {
     val TESTING_BUDGET_ID = "put a budget id here"
     val TESTING_CATEGORY_ID = "put a category id here"
 
-    val ynabBroker = YnabBroker( YnabConfiguration() )
+    val ynabBroker = YnabBrokerImpl( YnabConfiguration() )
     @Test
     fun testGetBudgetSummaries() {
         val budgets = ynabBroker.getBudgetSummaries()
