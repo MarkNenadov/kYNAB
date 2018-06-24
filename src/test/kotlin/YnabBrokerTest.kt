@@ -1,11 +1,12 @@
 import org.junit.Test
+import kotlin.test.assertEquals
 
 class YnabBrokerTest {
     val TESTING_BUDGET_ID = "8f35f8d5-e0ba-421e-b41e-8a43235d0f3b"
     val TESTING_BUDGET_NAME = "2017+Family Budget"
     val TESTING_CATEGORY_ID = "put a category id here"
 
-    val ynabBroker = YnabBrokerImpl( YnabConfiguration() )
+    val ynabBroker : YnabBroker = YnabBrokerImpl( YnabConfiguration() )
     @Test
     fun testGetBudgetSummaries() {
         val budgets = ynabBroker.getBudgetSummaries()
@@ -42,7 +43,9 @@ class YnabBrokerTest {
 
     @Test
     fun testGetOverBudgetCategories() {
-        val categoriesOverBudget = ynabBroker.getOverBudgetCategories( TESTING_BUDGET_ID )
+        val categoriesOverBudget = ynabBroker.getOverBudgetCategories( TESTING_BUDGET_ID, "2018-06" )
+
+        assertEquals( 2, categoriesOverBudget.size )
 
         for(categoryOverBudget in categoriesOverBudget) {
             println( categoryOverBudget.getJson() )

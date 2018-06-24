@@ -7,6 +7,10 @@ class YnabConfiguration() {
     val config = Yaml().loadAs( Files.newInputStream( Paths.get( "config.yaml" ) ), Properties::class.java )
 
     fun getUrl( endpointName : String ) : String {
-        return config.getProperty( "ynab_base_url" ) + "/" + endpointName + "?access_token=" + config.getProperty( "personal_access_token" )
+        return getEndpointPath( endpointName ) + "?access_token=" + config.getProperty( "personal_access_token" )
     }
+
+    fun getEndpointPath (endpointName: String) = getBaseUrl() + "/" + endpointName
+
+    fun getBaseUrl() = config.getProperty("ynab_base_url")
 }

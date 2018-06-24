@@ -29,7 +29,7 @@ class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
     }
 
     override fun getBudgetByName(name: String): YnabBudget {
-        var budgetId : String = "";
+        var budgetId = "";
         for(budgetSummary in getBudgetSummaries()) {
             if ( budgetSummary.name == name ) {
                 budgetId = budgetSummary.ynabId
@@ -40,11 +40,22 @@ class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
     }
 
 
-    override fun getOverBudgetCategories( budgetYnabId: String): List<YnabBudgetCategory> {
+    override fun getOverBudgetCategories( budgetYnabId: String, month: String ): List<YnabBudgetCategory> {
         val budget = getBudgetById( budgetYnabId )
 
-        // TODO: Make this real, not just a hardcoded month
-        return budget.budgetMonths[1].categories.filter { category -> category.isOverBudget() }
+        val matchingBudgetMonths = budget.budgetMonths.filter { budgetMonth -> budgetMonth.date == getMonthAsFullDate( month ) }
+
+        if ( matchingBudgetMonths.size == 0 ) {
+            throw Exception( "Couldn't find a budgetMonth matching " + month + " on budget [" + budgetYnabId + "]" )
+        } else if ( matchingBudgetMonths.size > 1 ) {
+            throw Exception( "Strange! Couldn't find a unique budgetMonth matching " + month + " on budget [" + budgetYnabId + "]" )
+        }
+
+        return matchingBudgetMonths[0].categories.filter { category -> category.isOverBudget() }
+    }
+
+    private fun getMonthAsFullDate( month: String ): String {
+        return month + "-01"
     }
 
     override fun getCategoryHistory(budgetYnabId: String, categoryYnabId: String): YnabCategoryHistory {
