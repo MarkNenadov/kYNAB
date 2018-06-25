@@ -10,5 +10,7 @@ interface YnabBroker {
     fun getBudgetByName( name: String ): YnabBudget
     fun getOverBudgetCategories(budgetYnabId: String, month: String): List<YnabBudgetCategory>
     fun getCategoryHistory( budgetYnabId: String, categoryYnabId: String): YnabCategoryHistory
+    fun getTransaction(  budgetYnabId: String, transactionYnabId : String ) : YnabTransaction
+    fun getTransactions( budgetYnabId : String ) : List<YnabTransaction>
     fun getTransactionsByMemo( budgetYnabId: String, memoText: String): List<YnabTransaction>
 }

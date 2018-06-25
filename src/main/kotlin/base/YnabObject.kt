@@ -22,4 +22,9 @@ open class YnabObject {
     fun createFromJson( jsonValue : String ) : YnabObject {
         return mapper.readValue( jsonValue )
     }
+
+    @JsonIgnore
+    protected fun loadYnabId(jsonObject: JsonObject) {
+        ynabId = jsonObject.getString( "id" )
+    }
 }

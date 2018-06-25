@@ -5,6 +5,7 @@ class YnabBrokerTest {
     val TESTING_BUDGET_ID = "8f35f8d5-e0ba-421e-b41e-8a43235d0f3b"
     val TESTING_BUDGET_NAME = "2017+Family Budget"
     val TESTING_CATEGORY_ID = "put a category id here"
+    val TESTING_TRANSACTION_ID = "b46d0227-03a2-443a-a07a-3cc149386f67"
 
     val ynabBroker : YnabBroker = YnabBrokerImpl( YnabConfiguration() )
     @Test
@@ -59,6 +60,21 @@ class YnabBrokerTest {
         for(transaction in trasactions) {
             println( transaction.getJson() )
         }
+    }
+
+    @Test
+    fun testGetTransactions() {
+        val trasactions = ynabBroker.getTransactions( TESTING_BUDGET_ID )
+
+        for(transaction in trasactions) {
+            println( transaction.getJson() )
+        }
+    }
+
+    @Test
+    fun testGetTransaction() {
+        val transaction = ynabBroker.getTransaction( TESTING_BUDGET_ID, TESTING_TRANSACTION_ID )
+        println( transaction.getJson() )
     }
 
 }

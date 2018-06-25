@@ -14,6 +14,7 @@ class YnabTransaction(jsonObject: JsonObject) : YnabObject() {
     var amount = 0
 
     init {
+        loadYnabId( jsonObject )
         date = jsonObject.getString( "date" )
 
         if ( !jsonObject.isNull( "memo" ) ) {

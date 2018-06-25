@@ -77,6 +77,26 @@ class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
         return categoryHistory
     }
 
+    override fun getTransactions(budgetYnabId: String): List<YnabTransaction> {
+        var result = mutableListOf<YnabTransaction>()
+
+        var responseData = getFromYnab( "budgets/" + budgetYnabId + "/transactions" ).data
+
+        responseData?.getArray( "transactions" )?.forEach { result.add( YnabTransaction( it ) ) }
+
+        return result;
+    }
+
+    override fun getTransaction(budgetYnabId: String, transactionYnabId: String): YnabTransaction {
+        var responseData = getFromYnab( "budgets/" + budgetYnabId + "/transactions/" + transactionYnabId ).data
+
+        if ( responseData != null ) {
+            return YnabTransaction(responseData.getObject("transaction"))
+        } else {
+            throw Exception( "Transaction [" + transactionYnabId + "] not found.")
+        }
+    }
+
     override fun getTransactionsByMemo(budgetYnabId: String, memoText: String): List<YnabTransaction> {
         val matchingTransactions : MutableList<YnabTransaction> = mutableListOf()
 
