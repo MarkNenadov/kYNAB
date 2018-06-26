@@ -46,9 +46,9 @@ class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
         val matchingBudgetMonths = budget.budgetMonths.filter { budgetMonth -> budgetMonth.date == getMonthAsFullDate( month ) }
 
         if ( matchingBudgetMonths.size == 0 ) {
-            throw Exception( "Couldn't find a budgetMonth matching " + month + " on budget [" + budgetYnabId + "]" )
+            throw Exception( "Couldn't find a budgetMonth matching $month on budget [$budgetYnabId]" )
         } else if ( matchingBudgetMonths.size > 1 ) {
-            throw Exception( "Strange! Couldn't find a unique budgetMonth matching " + month + " on budget [" + budgetYnabId + "]" )
+            throw Exception( "Strange! Couldn't find a unique budgetMonth matching $month on budget [$budgetYnabId]" )
         }
 
         return matchingBudgetMonths[0].categories.filter { category -> category.isOverBudget() }
@@ -93,7 +93,7 @@ class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
         if ( responseData != null ) {
             return YnabTransaction(responseData.getObject("transaction"))
         } else {
-            throw Exception( "Transaction [" + transactionYnabId + "] not found.")
+            throw Exception( "Transaction [$transactionYnabId] not found.")
         }
     }
 
@@ -115,7 +115,7 @@ class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
         val responseData = getFromYnab( endpointName ).data
 
         if ( responseData == null ) {
-            throw Exception( "Can't find data for " + endpointName )
+            throw Exception( "Can't find data for $endpointName" )
         }
 
         return responseData.getArray( endpointName )
@@ -126,7 +126,7 @@ class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
 
         if ( response.hasError() ) {
             print( response.errors[0].toString() )
-            throw Exception( "Error connecting to YNAB "+ endpointName + " endpoint [" + response.errors[0].toString() + "]" )
+            throw Exception( "Error connecting to YNAB $endpointName endpoint ${response.errors[0].toString()}]" )
         }
 
         return response

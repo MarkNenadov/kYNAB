@@ -2,18 +2,21 @@ package budget
 
 import base.JsonObject
 import base.YnabObject
+import budget.category.YnabBudgetCategory
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.json.JSONObject
 
-class YnabTransaction(jsonObject: JsonObject) : YnabObject() {
+class YnabTransaction() : YnabObject() {
     var date = ""
     var memo = ""
+    var payee : YnabPayee? = null;
+    var category : YnabBudgetCategory? = null;
     var amount = 0
 
-    init {
+    constructor( jsonObject: JsonObject ) : this() {
         loadYnabId( jsonObject )
         date = jsonObject.getString( "date" )
 
@@ -22,6 +25,9 @@ class YnabTransaction(jsonObject: JsonObject) : YnabObject() {
         }
 
         amount = jsonObject.getInt( "amount" )
+
+        category = YnabBudgetCategory( jsonObject.getString( "category_id" ), jsonObject.getString( "category_name" ) )
+        payee = YnabPayee( jsonObject.getString( "payee_id" ), jsonObject.getString( "payee_name" ) )
     }
 
     @JsonIgnore
