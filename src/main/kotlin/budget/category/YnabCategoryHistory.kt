@@ -4,18 +4,18 @@ import base.YnabObject
 import budget.YnabBudgetMonth
 
 class YnabCategoryHistory : YnabObject() {
-    val items : MutableList<YnabCategoryHistoryItem> = mutableListOf()
+    val items: MutableList<YnabCategoryHistoryItem> = mutableListOf()
 
-    fun addItem( date: String?, activity: Int ) {
-        if ( date == null ) {
-            throw Exception( "Category history [" + name + "] is missing date")
+    fun addItem(date: String?, activity: Int) {
+        if(date == null) {
+            throw Exception("Category history [$name] is missing date")
         }
 
-        items.add( YnabCategoryHistoryItem( date, activity ) )
+        items.add(YnabCategoryHistoryItem(date, activity))
     }
 
-    fun addItem(ynabBudgetMonth: YnabBudgetMonth?, category: YnabBudgetCategory ) {
-        addItem( ynabBudgetMonth?.date, category.activity )
+    fun addItem(ynabBudgetMonth: YnabBudgetMonth?, category: YnabBudgetCategory) {
+        addItem(ynabBudgetMonth?.date, category.activity)
     }
 
     fun initialize(category: YnabBudgetCategory) {

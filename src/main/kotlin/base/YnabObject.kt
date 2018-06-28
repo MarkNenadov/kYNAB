@@ -1,6 +1,5 @@
 package base
 
-import budget.YnabTransaction
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
@@ -11,20 +10,20 @@ open class YnabObject {
     var name = ""
 
     @JsonIgnore
-    val mapper = ObjectMapper().registerModule( KotlinModule() )
+    val mapper = ObjectMapper().registerModule(KotlinModule())
 
     @JsonIgnore
     fun getJson(): String {
-        return mapper.writeValueAsString(this )
+        return mapper.writeValueAsString(this)
     }
 
     @JsonIgnore
-    fun createFromJson( jsonValue : String ) : YnabObject {
-        return mapper.readValue( jsonValue )
+    fun createFromJson(jsonValue: String): YnabObject {
+        return mapper.readValue(jsonValue)
     }
 
     @JsonIgnore
     protected fun loadYnabId(jsonObject: JsonObject) {
-        ynabId = jsonObject.getString( "id" )
+        ynabId = jsonObject.getString("id")
     }
 }

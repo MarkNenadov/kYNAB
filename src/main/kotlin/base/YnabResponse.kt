@@ -4,18 +4,18 @@ import khttp.responses.Response
 import org.json.JSONObject
 
 class YnabResponse(response: Response) {
-    val errors : MutableList<JsonObject> = mutableListOf()
-    var data : JsonObject? = null
+    val errors: MutableList<JsonObject> = mutableListOf()
+    var data: JsonObject? = null
 
     init {
-        val jsonObject = JsonObject( response.jsonObject )
+        val jsonObject = JsonObject(response.jsonObject)
 
-        if ( jsonObject.hasKey( "error" ) ) {
-            errors.add( jsonObject.getObject( "error" ) )
-        } else if ( jsonObject.hasKey( "data" ) ) {
-            data = jsonObject.getObject( "data" )
+        if(jsonObject.hasKey("error")) {
+            errors.add(jsonObject.getObject("error"))
+        } else if(jsonObject.hasKey("data")) {
+            data = jsonObject.getObject("data")
         } else {
-            throw Exception( "This base.YnabResponse has neither an error nor data, I don't understand what is going on." )
+            throw Exception("This strange. YnabResponse has neither an error nor data, I don't understand what is going on.")
         }
 
     }
