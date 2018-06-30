@@ -38,4 +38,8 @@ class JsonObject(val wrappedJSONObject: JSONObject) {
     override fun toString(): String {
         return wrappedJSONObject.toString()
     }
+
+    fun getBoolean(key: String): Boolean {
+        return wrappedJSONObject.getBoolean(key)
+    }
 }

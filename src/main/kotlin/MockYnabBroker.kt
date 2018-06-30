@@ -17,7 +17,10 @@ class MockYnabBroker : YnabBroker {
     }
 
     override fun getBudgetByName(name: String): YnabBudget {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val budget = YnabBudget()
+        budget.name = name
+
+        return budget
     }
 
     override fun getOverBudgetCategories(budgetYnabId: String, month: String): List<YnabBudgetCategory> {
