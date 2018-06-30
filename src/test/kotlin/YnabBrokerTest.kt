@@ -4,7 +4,7 @@ import kotlin.test.assertEquals
 class YnabBrokerTest {
     val TESTING_BUDGET_ID = "8f35f8d5-e0ba-421e-b41e-8a43235d0f3b"
     val TESTING_BUDGET_NAME = "2017+Family Budget"
-    val TESTING_CATEGORY_ID = "put a category id here"
+    val TESTING_CATEGORY_ID = "ed953aad-02d4-4d1f-9524-ae5af699a132"
     val TESTING_TRANSACTION_ID = "b46d0227-03a2-443a-a07a-3cc149386f67"
 
     val ynabBroker : YnabBroker = YnabBrokerImpl( YnabConfiguration() )
