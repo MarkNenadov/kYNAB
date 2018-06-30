@@ -11,6 +11,7 @@ class YnabTransaction() : YnabObject() {
     var payee: YnabPayee? = null;
     var category: YnabBudgetCategory? = null;
     var amount = 0
+    var accountId = ""
 
     constructor(transactionJsonObject: JsonObject) : this() {
         loadYnabId(transactionJsonObject)
@@ -39,5 +40,14 @@ class YnabTransaction() : YnabObject() {
     @JsonIgnore
     fun memoContains(memoText: String): Boolean {
         return memo.toUpperCase().contains(memoText.toUpperCase())
+    }
+
+    override fun getJson() : String {
+        val objectNode = mapper.createObjectNode();
+        objectNode.put( "account_id", accountId )
+        objectNode.put( "date", "" )
+        objectNode.put( "amount", amount )
+
+        return ""
     }
 }

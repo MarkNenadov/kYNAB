@@ -13,7 +13,7 @@ open class YnabObject {
     val mapper = ObjectMapper().registerModule(KotlinModule())
 
     @JsonIgnore
-    fun getJson(): String {
+    open fun getJson(): String {
         return mapper.writeValueAsString(this)
     }
 

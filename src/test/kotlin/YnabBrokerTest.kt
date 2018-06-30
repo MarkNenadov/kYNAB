@@ -2,12 +2,14 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import base.assertNotEmpty
+import budget.YnabTransaction;
 
 class YnabBrokerTest {
     val TESTING_BUDGET_ID = "716692c6-55db-4b79-b11d-48efa0ca1f23"
     val TESTING_BUDGET_NAME = "TESTING"
     val TESTING_CATEGORY_ID = "ed953aad-02d4-4d1f-9524-ae5af699a132"
     val TESTING_TRANSACTION_ID = "b46d0227-03a2-443a-a07a-3cc149386f67"
+    val TESTING_ACCOIUNT_ID = "b0b3e9ba-4f2c-44b8-91d5-27815ae86fed"
 
     val ynabBroker: YnabBroker = YnabBrokerImpl(YnabConfiguration())
 
@@ -36,7 +38,7 @@ class YnabBrokerTest {
         assertNotEmpty(budget.ynabId)
         assertNotEmpty(budget.lastModifiedDate)
         assertEquals(TESTING_BUDGET_ID, budget.ynabId)
-        assertNotEmpty( budget.budgetMonths )
+        assertNotEmpty(budget.budgetMonths)
 
         println(budget.getJson())
     }
@@ -55,6 +57,8 @@ class YnabBrokerTest {
         val budget = ynabBroker.getBudgetById(TESTING_BUDGET_ID)
 
         // add new transaction via api
+        var ynabTransaction = YnabTransaction()
+        ynabTransaction = ynabBroker.createTransaction(TESTING_BUDGET_ID, ynabTransaction);
 
         val budgetRefreshed = ynabBroker.getRefreshedBudget(budget)
 
@@ -112,6 +116,23 @@ class YnabBrokerTest {
     fun testGetTransaction() {
         val transaction = ynabBroker.getTransaction(TESTING_BUDGET_ID, TESTING_TRANSACTION_ID)
         println(transaction.getJson())
+    }
+
+    @Test
+    fun testGetAccounts() {
+        val accounts = ynabBroker.getAccounts(TESTING_BUDGET_ID)
+
+        for(account in accounts) {
+            println(account.getJson())
+        }
+    }
+
+    @Test
+    fun testGetAccount() {
+        val account = ynabBroker.getAccount(TESTING_BUDGET_ID, TESTING_ACCOIUNT_ID)
+
+        assertNotNull( account )
+        assertEquals( TESTING_ACCOIUNT_ID, account.ynabId)
     }
 
 }
