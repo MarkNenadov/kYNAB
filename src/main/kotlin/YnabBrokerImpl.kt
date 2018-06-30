@@ -185,7 +185,9 @@ class YnabBrokerImpl(var configuration: YnabConfiguration) : YnabBroker {
 
     override fun createTransaction(ynabBudgetId: String, transaction: YnabTransaction): YnabTransaction {
         val endpointName = "budgets/" + ynabBudgetId + "/transactions"
-        val postData = "";//transaction.getCreateJson()
+        val postData = transaction.getJsonForCreate()
+
+        print( "post [" + postData   + "]" )
 
         var responseData = makeYnabPost(endpointName, postData).data
 

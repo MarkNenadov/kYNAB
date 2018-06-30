@@ -8,7 +8,7 @@ class YnabBrokerTest {
     val TESTING_BUDGET_ID = "716692c6-55db-4b79-b11d-48efa0ca1f23"
     val TESTING_BUDGET_NAME = "TESTING"
     val TESTING_CATEGORY_ID = "ed953aad-02d4-4d1f-9524-ae5af699a132"
-    val TESTING_TRANSACTION_ID = "b46d0227-03a2-443a-a07a-3cc149386f67"
+    val TESTING_TRANSACTION_ID = "96cc9028-21ad-4f7f-b575-72612ceb311e"
     val TESTING_ACCOIUNT_ID = "b0b3e9ba-4f2c-44b8-91d5-27815ae86fed"
 
     val ynabBroker: YnabBroker = YnabBrokerImpl(YnabConfiguration())
@@ -105,9 +105,9 @@ class YnabBrokerTest {
 
     @Test
     fun testGetTransactions() {
-        val trasactions = ynabBroker.getTransactions(TESTING_BUDGET_ID)
+        val transactions = ynabBroker.getTransactions(TESTING_BUDGET_ID)
 
-        for(transaction in trasactions) {
+        for(transaction in transactions) {
             println(transaction.getJson())
         }
     }
@@ -116,6 +116,14 @@ class YnabBrokerTest {
     fun testGetTransaction() {
         val transaction = ynabBroker.getTransaction(TESTING_BUDGET_ID, TESTING_TRANSACTION_ID)
         println(transaction.getJson())
+    }
+
+    @Test
+    fun testCreateTransaction() {
+        var transaction = ynabBroker.getTransaction(TESTING_BUDGET_ID, TESTING_TRANSACTION_ID)
+        transaction = ynabBroker.createTransaction( TESTING_BUDGET_ID, transaction)
+
+        print( transaction )
     }
 
     @Test
@@ -131,8 +139,8 @@ class YnabBrokerTest {
     fun testGetAccount() {
         val account = ynabBroker.getAccount(TESTING_BUDGET_ID, TESTING_ACCOIUNT_ID)
 
-        assertNotNull( account )
-        assertEquals( TESTING_ACCOIUNT_ID, account.ynabId)
+        assertNotNull(account)
+        assertEquals(TESTING_ACCOIUNT_ID, account.ynabId)
     }
 
 }

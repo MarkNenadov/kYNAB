@@ -78,6 +78,7 @@ class YnabBudget() : YnabObject() {
         return serverKnowledgeNumber != 0
     }
 
+    // TODO: Finish implementing this
     fun refreshFromDeltaBudget(deltaBudget: YnabBudget) {
         serverKnowledgeNumber = deltaBudget.serverKnowledgeNumber
     }

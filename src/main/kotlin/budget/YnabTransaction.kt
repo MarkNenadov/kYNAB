@@ -35,6 +35,8 @@ class YnabTransaction() : YnabObject() {
             transactionJsonObject.getString("payee_name")
         }
         payee = YnabPayee(transactionJsonObject.getString("payee_id"), payeeName)
+
+        accountId = transactionJsonObject.getString("account_id")
     }
 
     @JsonIgnore
@@ -42,12 +44,25 @@ class YnabTransaction() : YnabObject() {
         return memo.toUpperCase().contains(memoText.toUpperCase())
     }
 
-    override fun getJson() : String {
-        val objectNode = mapper.createObjectNode();
-        objectNode.put( "account_id", accountId )
-        objectNode.put( "date", "" )
-        objectNode.put( "amount", amount )
+    fun getJsonForCreate() : String {
+        val rootNode = mapper.createObjectNode();
 
-        return ""
+        val transactionNode = mapper.createObjectNode();
+        transactionNode.put( "account_id", accountId )
+        transactionNode.put( "date", "" )
+        transactionNode.put( "amount", amount )
+        transactionNode.put( "payee_id", payee?.ynabId )
+        transactionNode.put( "category_id", category?.ynabId )
+        transactionNode.put( "memo", memo )
+        // need to do cleared, approved, flag_color, import_id for real
+        transactionNode.put( "cleared", false )
+        transactionNode.put( "approved", true )
+        transactionNode.put( "flag_color", "red" )
+        transactionNode.put( "import_id", "" )
+
+        // TODO: figure out alterative to this deprecated method
+        rootNode.put( "transaction", transactionNode)
+
+        return rootNode.toString()
     }
 }

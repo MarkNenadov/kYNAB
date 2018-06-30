@@ -3,7 +3,6 @@ import budget.YnabBudget
 import budget.YnabTransaction
 import budget.category.YnabBudgetCategory
 import budget.category.YnabCategoryHistory
-import org.jetbrains.annotations.Mutable
 
 interface YnabBroker {
     fun getAccounts( budgetYnabId: String ) : MutableList<YnabAccount>
