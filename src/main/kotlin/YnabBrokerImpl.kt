@@ -17,15 +17,39 @@ class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
     }
 
     override fun getBudgetById(ynabId: String ): YnabBudget {
-        val responseData : JsonObject? = getFromYnab("budgets/" + ynabId ).data
+        val responseData : JsonObject? = fetchObjectFromYnab("budgets/" + ynabId ).data
 
         if ( responseData == null ) {
             throw Exception( "Can't find data for budget" )
         }
 
         val result = responseData.getObject( "budget" )
+        val serverKnowledgeNumber = responseData.getInt( "server_knowledge" )
 
-        return YnabBudget( result )
+        return YnabBudget( result, serverKnowledgeNumber )
+    }
+
+    override fun getRefreshedBudget(staleBudget: YnabBudget): YnabBudget {
+        if ( !staleBudget.hasDeltaInformation() ) {
+            throw Exception( "YnabBudget object is missing delta information (serverKnowledgeNumber)" )
+        }
+
+        val responseData : JsonObject? = fetchObjectFromYnab("budgets/" + staleBudget.ynabId, staleBudget.serverKnowledgeNumber ).data
+
+        if ( responseData == null ) {
+            throw Exception( "Can't find data for budget" )
+        }
+
+        val result = responseData.getObject( "budget" )
+        val serverKnowledgeNumber = responseData.getInt( "server_knowledge" )
+
+        print( result )
+
+        val deltaBudget = YnabBudget( result, serverKnowledgeNumber )
+
+        staleBudget.refreshFromDeltaBudget( deltaBudget );
+
+        return staleBudget;
     }
 
     override fun getBudgetByName(name: String): YnabBudget {
@@ -80,7 +104,7 @@ class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
     override fun getTransactions(budgetYnabId: String): List<YnabTransaction> {
         var result = mutableListOf<YnabTransaction>()
 
-        var responseData = getFromYnab( "budgets/" + budgetYnabId + "/transactions" ).data
+        var responseData = fetchObjectFromYnab("budgets/" + budgetYnabId + "/transactions" ).data
 
         responseData?.getArray( "transactions" )?.forEach { result.add( YnabTransaction( it ) ) }
 
@@ -88,7 +112,7 @@ class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
     }
 
     override fun getTransaction(budgetYnabId: String, transactionYnabId: String): YnabTransaction {
-        var responseData = getFromYnab( "budgets/" + budgetYnabId + "/transactions/" + transactionYnabId ).data
+        var responseData = fetchObjectFromYnab("budgets/" + budgetYnabId + "/transactions/" + transactionYnabId ).data
 
         if ( responseData != null ) {
             return YnabTransaction(responseData.getObject("transaction"))
@@ -112,7 +136,7 @@ class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
     }
 
     private fun getDataFromYnab( endpointName: String ): List<JsonObject> {
-        val responseData = getFromYnab( endpointName ).data
+        val responseData = fetchObjectFromYnab(endpointName ).data
 
         if ( responseData == null ) {
             throw Exception( "Can't find data for $endpointName" )
@@ -121,8 +145,8 @@ class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
         return responseData.getArray( endpointName )
     }
 
-    private fun getFromYnab( endpointName: String ): YnabResponse {
-        val response = YnabResponse(get(url = configuration.getUrl(endpointName)))
+    private fun fetchObjectFromYnab(endpointName: String, serverKnowledgeNumber: Int = 0): YnabResponse {
+        val response = YnabResponse(get(url = configuration.getUrl(endpointName) + "&last_knowledge_of_server=$serverKnowledgeNumber"))
 
         if ( response.hasError() ) {
             print( response.errors[0].toString() )
@@ -130,5 +154,9 @@ class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
         }
 
         return response
+    }
+
+    override fun budgetRequestRefresh(budget: YnabBudget): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

@@ -16,6 +16,8 @@ In order to begin, you must get a Personal Access Token from YNAB and then put i
 interface YnabBroker {
     fun getBudgetsPartiallyLoaded() : MutableList<YnabBudget>
     fun getBudgetById( ynabId: String ): YnabBudget
+    fun budgetRequestRefresh(budget: YnabBudget ): Boolean
+    fun getRefreshedBudget(staleBudget: YnabBudget ): YnabBudget
     fun getBudgetByName( name: String ): YnabBudget
     fun getOverBudgetCategories( budgetYnabId: String): List<YnabBudgetCategory>
     fun getCategoryHistory( budgetYnabId: String, categoryYnabId: String ): YnabCategoryHistory

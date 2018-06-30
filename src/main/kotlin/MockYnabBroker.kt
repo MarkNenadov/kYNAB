@@ -4,6 +4,14 @@ import budget.category.YnabBudgetCategory
 import budget.category.YnabCategoryHistory
 
 class MockYnabBroker : YnabBroker {
+    override fun getRefreshedBudget(staleBudget: YnabBudget): YnabBudget {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun budgetRequestRefresh(budget: YnabBudget): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun getBudgetsPartiallyLoaded(): MutableList<YnabBudget> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

@@ -6,6 +6,8 @@ import budget.category.YnabCategoryHistory
 interface YnabBroker {
     fun getBudgetsPartiallyLoaded() : MutableList<YnabBudget>
     fun getBudgetById( ynabId: String ): YnabBudget
+    fun budgetRequestRefresh(budget: YnabBudget ): Boolean
+    fun getRefreshedBudget(staleBudget: YnabBudget ): YnabBudget
     fun getBudgetByName( name: String ): YnabBudget
     fun getOverBudgetCategories(budgetYnabId: String, month: String): List<YnabBudgetCategory>
     fun getCategoryHistory( budgetYnabId: String, categoryYnabId: String): YnabCategoryHistory

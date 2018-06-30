@@ -10,6 +10,7 @@ class YnabBudget() : YnabObject() {
     val payees: MutableList<YnabPayee> = mutableListOf()
     val transactions: MutableList<YnabTransaction> = mutableListOf()
     var lastModifiedDate = ""
+    var serverKnowledgeNumber = 0;
 
     constructor(jsonObject: JsonObject) : this() {
         loadYnabId(jsonObject)
@@ -19,6 +20,10 @@ class YnabBudget() : YnabObject() {
         loadAccountsList(jsonObject)
         loadPayees(jsonObject)
         loadTransactions(jsonObject)
+    }
+
+    constructor(jsonObject: JsonObject, serverKnowledgeNumber: Int) : this(jsonObject) {
+        this.serverKnowledgeNumber = serverKnowledgeNumber
     }
 
     private fun loadModifiedDate(jsonObject: JsonObject) {
@@ -67,5 +72,13 @@ class YnabBudget() : YnabObject() {
             }
         }
         return categories
+    }
+
+    fun hasDeltaInformation(): Boolean {
+        return serverKnowledgeNumber != 0
+    }
+
+    fun refreshFromDeltaBudget(deltaBudget: YnabBudget) {
+        serverKnowledgeNumber = deltaBudget.serverKnowledgeNumber
     }
 }

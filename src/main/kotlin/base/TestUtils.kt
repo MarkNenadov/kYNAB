@@ -1,6 +1,5 @@
 package base
 
-import budget.YnabBudget
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 
