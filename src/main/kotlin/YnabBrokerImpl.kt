@@ -6,12 +6,12 @@ import budget.category.YnabCategoryHistory
 import khttp.get
 
 class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
-    override fun getBudgetSummaries() : MutableList<YnabBudgetSummary> {
-        val result : MutableList<YnabBudgetSummary> = mutableListOf()
+    override fun getBudgetsPartiallyLoaded() : MutableList<YnabBudget> {
+        val result : MutableList<YnabBudget> = mutableListOf()
 
         val dataList = getDataFromYnab( "budgets" )
 
-        dataList.forEach{ result.add( YnabBudgetSummary( it ) ) }
+        dataList.forEach{ result.add( YnabBudget( it ) ) }
 
         return result
     }
@@ -30,7 +30,7 @@ class YnabBrokerImpl(var configuration: YnabConfiguration ) : YnabBroker {
 
     override fun getBudgetByName(name: String): YnabBudget {
         var budgetId = "";
-        for(budgetSummary in getBudgetSummaries()) {
+        for(budgetSummary in getBudgetsPartiallyLoaded()) {
             if ( budgetSummary.name == name ) {
                 budgetId = budgetSummary.ynabId
             }

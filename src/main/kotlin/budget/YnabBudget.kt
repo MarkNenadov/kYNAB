@@ -1,20 +1,29 @@
 package budget
 
 import base.JsonObject
+import base.YnabObject
 import budget.category.YnabBudgetCategory
 
-class YnabBudget() : YnabBudgetSummary() {
+class YnabBudget() : YnabObject() {
+    val budgetMonths: MutableList<YnabBudgetMonth> = mutableListOf()
+    val accounts: MutableList<YnabAccount> = mutableListOf()
+    val payees: MutableList<YnabPayee> = mutableListOf()
+    val transactions: MutableList<YnabTransaction> = mutableListOf()
+    var lastModifiedDate = ""
+
     constructor(jsonObject: JsonObject) : this() {
+        loadYnabId(jsonObject)
+        loadName(jsonObject)
+        loadModifiedDate(jsonObject)
         loadBudgetMonths(jsonObject)
         loadAccountsList(jsonObject)
         loadPayees(jsonObject)
         loadTransactions(jsonObject)
     }
 
-    val budgetMonths: MutableList<YnabBudgetMonth> = mutableListOf()
-    val accounts: MutableList<YnabAccount> = mutableListOf()
-    val payees: MutableList<YnabPayee> = mutableListOf()
-    val transactions: MutableList<YnabTransaction> = mutableListOf()
+    private fun loadModifiedDate(jsonObject: JsonObject) {
+        lastModifiedDate = jsonObject.getString("last_modified_on")
+    }
 
     private fun loadTransactions(jsonObject: JsonObject) {
         for(transactionJsonObject in jsonObject.getArray("transactions")) {

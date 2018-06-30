@@ -1,5 +1,8 @@
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import base.assertNotEmpty
+import budget.YnabBudget
 
 class YnabBrokerTest {
     val TESTING_BUDGET_ID = "8f35f8d5-e0ba-421e-b41e-8a43235d0f3b"
@@ -9,8 +12,10 @@ class YnabBrokerTest {
 
     val ynabBroker : YnabBroker = YnabBrokerImpl( YnabConfiguration() )
     @Test
-    fun testGetBudgetSummaries() {
-        val budgets = ynabBroker.getBudgetSummaries()
+    fun testGetBudgetsPartiallyLoaded() {
+        val budgets = ynabBroker.getBudgetsPartiallyLoaded()
+
+        assertNotEmpty( budgets )
 
         for (budget in budgets) {
             println( budget.name + " " + budget.ynabId + " " + budget.lastModifiedDate )
@@ -20,6 +25,10 @@ class YnabBrokerTest {
     @Test
     fun testGetBudgetById() {
         val budget = ynabBroker.getBudgetById( TESTING_BUDGET_ID )
+
+        assertNotNull( budget )
+        assertNotEmpty( budget.name )
+        assertEquals( TESTING_BUDGET_ID, budget.ynabId )
 
         println( budget.getJson() )
     }

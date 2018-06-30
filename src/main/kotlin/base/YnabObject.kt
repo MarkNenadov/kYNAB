@@ -26,4 +26,11 @@ open class YnabObject {
     protected fun loadYnabId(jsonObject: JsonObject) {
         ynabId = jsonObject.getString("id")
     }
+
+    @JsonIgnore
+    protected fun loadName(jsonObject: JsonObject) {
+        name = jsonObject.getString("name")
+    }
+
+
 }

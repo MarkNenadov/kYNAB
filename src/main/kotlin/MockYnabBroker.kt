@@ -1,11 +1,10 @@
 import budget.YnabBudget
-import budget.YnabBudgetSummary
 import budget.YnabTransaction
 import budget.category.YnabBudgetCategory
 import budget.category.YnabCategoryHistory
 
 class MockYnabBroker : YnabBroker {
-    override fun getBudgetSummaries(): MutableList<YnabBudgetSummary> {
+    override fun getBudgetsPartiallyLoaded(): MutableList<YnabBudget> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
