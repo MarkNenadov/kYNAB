@@ -1,13 +1,20 @@
 # TODO
 
+ASAP
 * Make ynabBroker.createTransaction() work
 
-* Finish implementing ynabBudget.refreshFromDeltaBudget
+* Finish implementing ynabBudget.refreshFromDeltaBudget (need createTransaction to work in order to test this)
+
+MEDIUM PRIORITY
+
+* Add YnabBroker methods to fill in functionality
+
+LOWER PRIORITY
 
 * Fix broken test (YnabTransactionTest.testCreateFromJson)
 
-* Implement MockYnabBroker method stubs
+VERY LOW PRIORITY
 
-* Add YnabBroker methods to fill in important functionality
+* Implement MockYnabBroker method stubs
 
 * Generate Dokka documentation?

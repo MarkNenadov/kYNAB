@@ -1,17 +1,14 @@
 import base.JsonObject
-import base.YnabResponse
 import budget.*
 import budget.category.YnabBudgetCategory
 import budget.category.YnabCategoryHistory
-import khttp.get
-import khttp.post
-import org.jetbrains.annotations.Mutable
+import base.YnabHttp
 
 class YnabBrokerImpl(var configuration: YnabConfiguration) : YnabBroker {
     override fun getAccounts(budgetYnabId: String): MutableList<YnabAccount> {
         val result = mutableListOf<YnabAccount>()
 
-        val responseData = makeYnabGet("budgets/" + budgetYnabId + "/accounts").data
+        val responseData = YnabHttp.get(configuration.getUrl("budgets/" + budgetYnabId + "/accounts")).data
 
         responseData?.getArray("accounts")?.forEach { result.add(YnabAccount(it)) }
 
@@ -19,7 +16,7 @@ class YnabBrokerImpl(var configuration: YnabConfiguration) : YnabBroker {
     }
 
     override fun getAccount(budgetYnabId: String, accountYnabId: String): YnabAccount {
-        val responseData = makeYnabGet("budgets/" + budgetYnabId + "/accounts/" + accountYnabId).data
+        val responseData = YnabHttp.get(configuration.getUrl("budgets/" + budgetYnabId + "/accounts/" + accountYnabId)).data
 
         if(responseData != null) {
             return YnabAccount(responseData.getObject("account"))
@@ -39,7 +36,7 @@ class YnabBrokerImpl(var configuration: YnabConfiguration) : YnabBroker {
     }
 
     override fun getBudgetById(ynabId: String): YnabBudget {
-        val responseData: JsonObject? = makeYnabGet("budgets/" + ynabId).data
+        val responseData: JsonObject? = YnabHttp.get(configuration.getUrl("budgets/" + ynabId)).data
 
         if(responseData == null) {
             throw Exception("Can't find data for budget")
@@ -56,7 +53,7 @@ class YnabBrokerImpl(var configuration: YnabConfiguration) : YnabBroker {
             throw Exception("YnabBudget object is missing delta information (serverKnowledgeNumber)")
         }
 
-        val responseData: JsonObject? = makeYnabGet("budgets/" + staleBudget.ynabId, staleBudget.serverKnowledgeNumber).data
+        val responseData: JsonObject? = YnabHttp.get(configuration.getUrl("budgets/" + staleBudget.ynabId ), staleBudget.serverKnowledgeNumber).data
 
         if(responseData == null) {
             throw Exception("Can't find data for budget")
@@ -64,8 +61,6 @@ class YnabBrokerImpl(var configuration: YnabConfiguration) : YnabBroker {
 
         val result = responseData.getObject("budget")
         val serverKnowledgeNumber = responseData.getInt("server_knowledge")
-
-        print(result)
 
         val deltaBudget = YnabBudget(result, serverKnowledgeNumber)
 
@@ -86,7 +81,7 @@ class YnabBrokerImpl(var configuration: YnabConfiguration) : YnabBroker {
     }
 
 
-    override fun getOverBudgetCategories(budgetYnabId: String, month: String): List<YnabBudgetCategory> {
+    override fun getOverSpentCategories(budgetYnabId: String, month: String): List<YnabBudgetCategory> {
         val budget = getBudgetById(budgetYnabId)
 
         val matchingBudgetMonths = budget.budgetMonths.filter { budgetMonth -> budgetMonth.date == getMonthAsFullDate(month) }
@@ -126,7 +121,7 @@ class YnabBrokerImpl(var configuration: YnabConfiguration) : YnabBroker {
     override fun getTransactions(budgetYnabId: String): List<YnabTransaction> {
         val result = mutableListOf<YnabTransaction>()
 
-        val responseData = makeYnabGet("budgets/" + budgetYnabId + "/transactions").data
+        val responseData = YnabHttp.get(configuration.getUrl("budgets/" + budgetYnabId + "/transactions")).data
 
         responseData?.getArray("transactions")?.forEach { result.add(YnabTransaction(it)) }
 
@@ -134,7 +129,7 @@ class YnabBrokerImpl(var configuration: YnabConfiguration) : YnabBroker {
     }
 
     override fun getTransaction(budgetYnabId: String, transactionYnabId: String): YnabTransaction {
-        val responseData = makeYnabGet("budgets/" + budgetYnabId + "/transactions/" + transactionYnabId).data
+        val responseData = YnabHttp.get(configuration.getUrl("budgets/" + budgetYnabId + "/transactions/" + transactionYnabId)).data
 
         if(responseData != null) {
             return YnabTransaction(responseData.getObject("transaction"))
@@ -158,25 +153,13 @@ class YnabBrokerImpl(var configuration: YnabConfiguration) : YnabBroker {
     }
 
     private fun getDataFromYnab(endpointName: String): List<JsonObject> {
-        val responseData = makeYnabGet(endpointName).data
+        val responseData = YnabHttp.get(configuration.getUrl(endpointName)).data
 
         if(responseData == null) {
             throw Exception("Can't find data for $endpointName")
         }
 
         return responseData.getArray(endpointName)
-    }
-
-    private fun makeYnabGet(endpointName: String, serverKnowledgeNumber: Int = 0): YnabResponse {
-        val url = configuration.getUrl(endpointName) + "&last_knowledge_of_server=$serverKnowledgeNumber"
-        val response = YnabResponse(get(url = url))
-
-        if(response.hasError()) {
-            print(response.errors[0].toString())
-            throw Exception("Error connecting to YNAB $endpointName endpoint ${response.errors[0].toString()}]")
-        }
-
-        return response
     }
 
     override fun budgetRequiresRefresh(budget: YnabBudget): Boolean {
@@ -187,21 +170,28 @@ class YnabBrokerImpl(var configuration: YnabConfiguration) : YnabBroker {
         val endpointName = "budgets/" + ynabBudgetId + "/transactions"
         val postData = transaction.getJsonForCreate()
 
-        print( "post [" + postData   + "]" )
+        var responseData = YnabHttp.post(configuration.getUrl(endpointName), postData).data
 
-        var responseData = makeYnabPost(endpointName, postData).data
-
-        throw Exception( "Not fully implemented" )
+        throw Exception("Not fully implemented")
     }
 
-    private fun makeYnabPost(endpointName: String, postData: String): YnabResponse {
-        val response = YnabResponse(post(url = configuration.getUrl(endpointName), data = postData))
+    override fun getPayees(budgetYnabId: String): List<YnabPayee> {
+        val result = mutableListOf<YnabPayee>()
 
-        if(response.hasError()) {
-            print(response.errors[0].toString())
-            throw Exception("Error connecting to YNAB $endpointName endpoint ${response.errors[0].toString()}]")
+        val responseData = YnabHttp.get(configuration.getUrl("budgets/" + budgetYnabId + "/payees")).data
+
+        responseData?.getArray("payees")?.forEach { result.add(YnabPayee(it)) }
+
+        return result;
+    }
+
+    override fun getPayee(budgetYnabId: String, payeeYnabId: String): YnabPayee {
+        val responseData = YnabHttp.get(configuration.getUrl("budgets/" + budgetYnabId + "/payees/" + payeeYnabId)).data
+
+        if(responseData != null) {
+            return YnabPayee(responseData.getObject("payee"))
+        } else {
+            throw Exception("Payee [$payeeYnabId] not found.")
         }
-
-        return response
     }
 }

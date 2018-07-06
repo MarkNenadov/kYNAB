@@ -49,7 +49,7 @@ class YnabTransaction() : YnabObject() {
 
         val transactionNode = mapper.createObjectNode();
         transactionNode.put( "account_id", accountId )
-        transactionNode.put( "date", "" )
+        transactionNode.put( "date", "2018-01-01" )
         transactionNode.put( "amount", amount )
         transactionNode.put( "payee_id", payee?.ynabId )
         transactionNode.put( "category_id", category?.ynabId )

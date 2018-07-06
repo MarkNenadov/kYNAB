@@ -9,6 +9,7 @@ class YnabBrokerTest {
     val TESTING_BUDGET_NAME = "TESTING"
     val TESTING_CATEGORY_ID = "ed953aad-02d4-4d1f-9524-ae5af699a132"
     val TESTING_TRANSACTION_ID = "96cc9028-21ad-4f7f-b575-72612ceb311e"
+    val TESTING_PAYEE_ID = "e2f5814d-431c-47ec-8101-c3da519257f9"
     val TESTING_ACCOIUNT_ID = "b0b3e9ba-4f2c-44b8-91d5-27815ae86fed"
 
     val ynabBroker: YnabBroker = YnabBrokerImpl(YnabConfiguration())
@@ -85,9 +86,9 @@ class YnabBrokerTest {
 
     @Test
     fun testGetOverBudgetCategories() {
-        val categoriesOverBudget = ynabBroker.getOverBudgetCategories(TESTING_BUDGET_ID, "2018-06")
+        val categoriesOverBudget = ynabBroker.getOverSpentCategories(TESTING_BUDGET_ID, "2018-06")
 
-        assertEquals(2, categoriesOverBudget.size)
+        assertEquals(1, categoriesOverBudget.size)
 
         for(categoryOverBudget in categoriesOverBudget) {
             println(categoryOverBudget.getJson())
@@ -143,4 +144,19 @@ class YnabBrokerTest {
         assertEquals(TESTING_ACCOIUNT_ID, account.ynabId)
     }
 
+    @Test
+    fun testGetPayees() {
+        val payees = ynabBroker.getPayees(TESTING_BUDGET_ID)
+
+        assertNotEmpty(payees)
+    }
+
+    @Test
+    fun testGetPayee() {
+        val payee = ynabBroker.getPayee(TESTING_BUDGET_ID, TESTING_PAYEE_ID)
+
+        assertNotNull(payee)
+        assertEquals(TESTING_PAYEE_ID, payee.ynabId)
+        assertNotEmpty(payee.name)
+    }
 }

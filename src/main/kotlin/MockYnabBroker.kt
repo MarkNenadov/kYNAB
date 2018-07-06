@@ -1,5 +1,6 @@
 import budget.YnabAccount
 import budget.YnabBudget
+import budget.YnabPayee
 import budget.YnabTransaction
 import budget.category.YnabBudgetCategory
 import budget.category.YnabCategoryHistory
@@ -14,6 +15,14 @@ class MockYnabBroker : YnabBroker {
     }
 
     override fun getAccount(budgetYnabId: String, accountYnabId: String): YnabAccount {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getPayees(budgetYnabId: String): List<YnabPayee> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getPayee(budgetYnabId: String, payeeYnabId: String): YnabPayee {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -43,7 +52,7 @@ class MockYnabBroker : YnabBroker {
         return budget
     }
 
-    override fun getOverBudgetCategories(budgetYnabId: String, month: String): List<YnabBudgetCategory> {
+    override fun getOverSpentCategories(budgetYnabId: String, month: String): List<YnabBudgetCategory> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
