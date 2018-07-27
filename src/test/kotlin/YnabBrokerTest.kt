@@ -3,16 +3,22 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import base.assertNotEmpty
 import budget.YnabTransaction;
+import org.yaml.snakeyaml.Yaml
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.util.*
 
 class YnabBrokerTest {
-    val TESTING_BUDGET_ID = "716692c6-55db-4b79-b11d-48efa0ca1f23"
-    val TESTING_BUDGET_NAME = "TESTING"
-    val TESTING_CATEGORY_ID = "ed953aad-02d4-4d1f-9524-ae5af699a132"
-    val TESTING_TRANSACTION_ID = "96cc9028-21ad-4f7f-b575-72612ceb311e"
-    val TESTING_PAYEE_ID = "e2f5814d-431c-47ec-8101-c3da519257f9"
-    val TESTING_ACCOIUNT_ID = "b0b3e9ba-4f2c-44b8-91d5-27815ae86fed"
+    private val ACCESS_TOKEN_PATH = "src/main/resources/access_token.yaml"
 
-    val ynabBroker: YnabBroker = YnabBrokerImpl(YnabConfiguration())
+    private val TESTING_BUDGET_ID = "716692c6-55db-4b79-b11d-48efa0ca1f23"
+    private val TESTING_BUDGET_NAME = "TESTING"
+    private val TESTING_CATEGORY_ID = "ed953aad-02d4-4d1f-9524-ae5af699a132"
+    private val TESTING_TRANSACTION_ID = "96cc9028-21ad-4f7f-b575-72612ceb311e"
+    private val TESTING_PAYEE_ID = "e2f5814d-431c-47ec-8101-c3da519257f9"
+    private val TESTING_ACCOIUNT_ID = "b0b3e9ba-4f2c-44b8-91d5-27815ae86fed"
+
+    val ynabBroker: YnabBroker = YnabBrokerImpl(accessToken = loadAccessToken(ACCESS_TOKEN_PATH) )
 
     @Test
     fun testGetBudgetsPartiallyLoaded() {
@@ -158,5 +164,9 @@ class YnabBrokerTest {
         assertNotNull(payee)
         assertEquals(TESTING_PAYEE_ID, payee.ynabId)
         assertNotEmpty(payee.name)
+    }
+
+    private fun loadAccessToken(path: String): String {
+        return Yaml().loadAs( Files.newInputStream( Paths.get( path ) ), Properties::class.java ).getProperty("accessToken")
     }
 }
