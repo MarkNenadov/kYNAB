@@ -1,4 +1,4 @@
-package base
+package com.pythonbyte.kynab.base
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.ObjectMapper

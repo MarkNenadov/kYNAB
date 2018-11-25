@@ -1,7 +1,7 @@
-package budget
+package com.pythonbyte.kynab.budget
 
-import base.JsonObject
-import base.YnabObject
+import com.pythonbyte.kynab.base.JsonObject
+import com.pythonbyte.kynab.base.YnabObject
 
 class YnabAccount() : YnabObject() {
     var balance = 0

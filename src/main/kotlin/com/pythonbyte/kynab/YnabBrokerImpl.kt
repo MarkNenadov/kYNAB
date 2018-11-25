@@ -1,8 +1,13 @@
-import base.JsonObject
-import budget.*
-import budget.category.YnabBudgetCategory
-import budget.category.YnabCategoryHistory
-import base.YnabHttp
+package com.pythonbyte.kynab
+
+import com.pythonbyte.kynab.base.JsonObject
+import com.pythonbyte.kynab.budget.category.YnabBudgetCategory
+import com.pythonbyte.kynab.budget.category.YnabCategoryHistory
+import com.pythonbyte.kynab.base.YnabHttp
+import com.pythonbyte.kynab.budget.YnabAccount
+import com.pythonbyte.kynab.budget.YnabBudget
+import com.pythonbyte.kynab.budget.YnabPayee
+import com.pythonbyte.kynab.budget.YnabTransaction
 
 class YnabBrokerImpl(private val accessToken:String, val baseUrl:String = "https://api.youneedabudget.com/v1") : YnabBroker {
     override fun getAccounts(budgetYnabId: String): MutableList<YnabAccount> {
@@ -39,10 +44,10 @@ class YnabBrokerImpl(private val accessToken:String, val baseUrl:String = "https
         val responseData: JsonObject? = YnabHttp.get(getUrl("budgets/" + ynabId)).data
 
         if(responseData == null) {
-            throw Exception("Can't find data for budget")
+            throw Exception("Can't find data for com.pythonbyte.budget")
         }
 
-        val result = responseData.getObject("budget")
+        val result = responseData.getObject("com/pythonbyte/kynab/budget")
         val serverKnowledgeNumber = responseData.getInt("server_knowledge")
 
         return YnabBudget(result, serverKnowledgeNumber)
@@ -56,10 +61,10 @@ class YnabBrokerImpl(private val accessToken:String, val baseUrl:String = "https
         val responseData: JsonObject? = YnabHttp.get(getUrl("budgets/" + staleBudget.ynabId ), staleBudget.serverKnowledgeNumber).data
 
         if(responseData == null) {
-            throw Exception("Can't find data for budget")
+            throw Exception("Can't find data for com.pythonbyte.budget")
         }
 
-        val result = responseData.getObject("budget")
+        val result = responseData.getObject("com/pythonbyte/kynab/budget")
         val serverKnowledgeNumber = responseData.getInt("server_knowledge")
 
         val deltaBudget = YnabBudget(result, serverKnowledgeNumber)
@@ -87,9 +92,9 @@ class YnabBrokerImpl(private val accessToken:String, val baseUrl:String = "https
         val matchingBudgetMonths = budget.budgetMonths.filter { budgetMonth -> budgetMonth.date == getMonthAsFullDate(month) }
 
         if(matchingBudgetMonths.size == 0) {
-            throw Exception("Couldn't find a budgetMonth matching $month on budget [$budgetYnabId]")
+            throw Exception("Couldn't find a budgetMonth matching $month on com.pythonbyte.budget [$budgetYnabId]")
         } else if(matchingBudgetMonths.size > 1) {
-            throw Exception("Strange! Couldn't find a unique budgetMonth matching $month on budget [$budgetYnabId]")
+            throw Exception("Strange! Couldn't find a unique budgetMonth matching $month on com.pythonbyte.budget [$budgetYnabId]")
         }
 
         return matchingBudgetMonths[0].categories.filter { category -> category.isOverBudget() }

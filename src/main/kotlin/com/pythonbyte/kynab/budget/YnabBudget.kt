@@ -1,8 +1,8 @@
-package budget
+package com.pythonbyte.kynab.budget
 
-import base.JsonObject
-import base.YnabObject
-import budget.category.YnabBudgetCategory
+import com.pythonbyte.kynab.base.JsonObject
+import com.pythonbyte.kynab.base.YnabObject
+import com.pythonbyte.kynab.budget.category.YnabBudgetCategory
 
 class YnabBudget() : YnabObject() {
     val budgetMonths: MutableList<YnabBudgetMonth> = mutableListOf()

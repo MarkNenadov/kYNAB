@@ -1,8 +1,12 @@
+package com.pythonbyte.budget
+
+import com.pythonbyte.kynab.YnabBroker
+import com.pythonbyte.kynab.YnabBrokerImpl
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import base.assertNotEmpty
-import budget.YnabTransaction;
+import com.pythonbyte.kynab.base.assertNotEmpty
+import com.pythonbyte.kynab.budget.YnabTransaction;
 import org.yaml.snakeyaml.Yaml
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -18,7 +22,7 @@ class YnabBrokerTest {
     private val TESTING_PAYEE_ID = "e2f5814d-431c-47ec-8101-c3da519257f9"
     private val TESTING_ACCOIUNT_ID = "b0b3e9ba-4f2c-44b8-91d5-27815ae86fed"
 
-    val ynabBroker: YnabBroker = YnabBrokerImpl(accessToken = loadAccessToken(ACCESS_TOKEN_PATH) )
+    val ynabBroker: YnabBroker = YnabBrokerImpl(accessToken = loadAccessToken(ACCESS_TOKEN_PATH))
 
     @Test
     fun testGetBudgetsPartiallyLoaded() {

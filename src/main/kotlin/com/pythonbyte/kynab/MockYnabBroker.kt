@@ -1,9 +1,11 @@
-import budget.YnabAccount
-import budget.YnabBudget
-import budget.YnabPayee
-import budget.YnabTransaction
-import budget.category.YnabBudgetCategory
-import budget.category.YnabCategoryHistory
+package com.pythonbyte.kynab
+
+import com.pythonbyte.kynab.budget.YnabAccount
+import com.pythonbyte.kynab.budget.YnabBudget
+import com.pythonbyte.kynab.budget.YnabPayee
+import com.pythonbyte.kynab.budget.YnabTransaction
+import com.pythonbyte.kynab.budget.category.YnabBudgetCategory
+import com.pythonbyte.kynab.budget.category.YnabCategoryHistory
 
 class MockYnabBroker : YnabBroker {
     override fun createTransaction(ynabBudgetId: String, transaction: YnabTransaction): YnabTransaction {

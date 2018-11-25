@@ -1,8 +1,8 @@
-package budget.category
+package com.pythonbyte.kynab.budget.category
 
-import base.JsonObject
-import base.YnabObject
-import budget.YnabBudgetMonth
+import com.pythonbyte.kynab.base.JsonObject
+import com.pythonbyte.kynab.base.YnabObject
+import com.pythonbyte.kynab.budget.YnabBudgetMonth
 import com.fasterxml.jackson.annotation.JsonIgnore
 
 class YnabBudgetCategory() : YnabObject() {
@@ -13,7 +13,7 @@ class YnabBudgetCategory() : YnabObject() {
     @JsonIgnore
     var referenceBudgetMonth: YnabBudgetMonth? = null
 
-    constructor( jsonObject: JsonObject ) : this() {
+    constructor( jsonObject: JsonObject) : this() {
         loadYnabId( jsonObject )
         name = jsonObject.getString( "name" )
         balance = jsonObject.getInt( "balance" )

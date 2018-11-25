@@ -1,7 +1,7 @@
-package budget.category
+package com.pythonbyte.kynab.budget.category
 
-import base.YnabObject
-import budget.YnabBudgetMonth
+import com.pythonbyte.kynab.base.YnabObject
+import com.pythonbyte.kynab.budget.YnabBudgetMonth
 
 class YnabCategoryHistory : YnabObject() {
     val items: MutableList<YnabCategoryHistoryItem> = mutableListOf()

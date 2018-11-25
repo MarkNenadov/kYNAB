@@ -1,4 +1,4 @@
-package base
+package com.pythonbyte.kynab.base
 
 import org.json.JSONObject
 

@@ -10,15 +10,15 @@ A Kotlin interface to the YNAB (You Need A Budget) API.
 
 In order to begin, you must get a Personal Access Token from YNAB and then put it into config yaml (in the personal_access_token property)
 
-### The YnabBroker API
+### The com.pythonbyte.kynab.YnabBroker API
 
 ```
-interface YnabBroker {
+interface com.pythonbyte.kynab.YnabBroker {
     fun getBudgetsPartiallyLoaded() : MutableList<YnabBudget>
 
     fun getBudgetById( ynabId: String ): YnabBudget
 
-    fun budgetRequiresRefresh(budget: YnabBudget ): Boolean
+    fun budgetRequiresRefresh(com.pythonbyte.budget: YnabBudget ): Boolean
 
     fun getRefreshedBudget(staleBudget: YnabBudget ): YnabBudget
 

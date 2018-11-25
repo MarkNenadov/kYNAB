@@ -1,7 +1,6 @@
-package base
+package com.pythonbyte.kynab.base
 
 import khttp.responses.Response
-import org.json.JSONObject
 
 class YnabResponse(response: Response) {
     val errors: MutableList<JsonObject> = mutableListOf()

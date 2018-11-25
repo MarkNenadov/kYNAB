@@ -1,6 +1,7 @@
-package budget
+package com.pythonbyte.budget
 
-import base.JsonObject
+import com.pythonbyte.kynab.base.JsonObject
+import com.pythonbyte.kynab.budget.YnabTransaction
 import org.json.JSONObject
 import org.junit.Test
 import kotlin.test.assertEquals

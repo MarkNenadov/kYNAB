@@ -7,7 +7,7 @@ ASAP
 
 MEDIUM PRIORITY
 
-* Add YnabBroker methods to fill in functionality
+* Add com.pythonbyte.kynab.YnabBroker methods to fill in functionality
 
 LOWER PRIORITY
 
@@ -15,6 +15,6 @@ LOWER PRIORITY
 
 VERY LOW PRIORITY
 
-* Implement MockYnabBroker method stubs
+* Implement com.pythonbyte.kynab.MockYnabBroker method stubs
 
 * Generate Dokka documentation?
