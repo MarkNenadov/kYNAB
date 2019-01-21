@@ -58,7 +58,7 @@ class MockYnabBroker : YnabBroker {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getTransactions(budgetYnabId: String) : List<YnabTransaction> {
+    override fun getTransactions(budgetYnabId: String): List<YnabTransaction> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

@@ -7,7 +7,7 @@ import com.pythonbyte.kynab.budget.category.YnabBudgetCategory
 class YnabBudgetMonth() : YnabObject() {
     var date = ""
     var note = ""
-    var toBeBudgetedAmount = 0;
+    var toBeBudgetedAmount = 0
     var categories: MutableList<YnabBudgetCategory> = mutableListOf()
 
 
@@ -16,7 +16,7 @@ class YnabBudgetMonth() : YnabObject() {
         note = monthJsonObject.getString("note")
         toBeBudgetedAmount = monthJsonObject.getInt("to_be_budgeted")
 
-        for(categoryJsonObject in monthJsonObject.getArray("categories")) {
+        for (categoryJsonObject in monthJsonObject.getArray("categories")) {
             addCategory(categoryJsonObject)
         }
     }

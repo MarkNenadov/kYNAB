@@ -2,61 +2,63 @@ package com.pythonbyte.budget
 
 import com.pythonbyte.kynab.YnabBroker
 import com.pythonbyte.kynab.YnabBrokerImpl
-import org.junit.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 import com.pythonbyte.kynab.base.assertNotEmpty
-import com.pythonbyte.kynab.budget.YnabTransaction;
+import com.pythonbyte.kynab.budget.YnabTransaction
+import org.junit.Test
 import org.yaml.snakeyaml.Yaml
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class YnabBrokerTest {
-    private val ACCESS_TOKEN_PATH = "src/main/resources/access_token.yaml"
+    val defaultTestPropertiesPath = "src/test/resources/properties.yml"
+    val testProperties = loadTestProperties()
 
-    private val TESTING_BUDGET_ID = "716692c6-55db-4b79-b11d-48efa0ca1f23"
-    private val TESTING_BUDGET_NAME = "TESTING"
-    private val TESTING_CATEGORY_ID = "ed953aad-02d4-4d1f-9524-ae5af699a132"
-    private val TESTING_TRANSACTION_ID = "96cc9028-21ad-4f7f-b575-72612ceb311e"
-    private val TESTING_PAYEE_ID = "e2f5814d-431c-47ec-8101-c3da519257f9"
-    private val TESTING_ACCOIUNT_ID = "b0b3e9ba-4f2c-44b8-91d5-27815ae86fed"
+    private val accessToken: String = checkAccessToken(testProperties["accessToken"] as String)
+    private val testingBudgetId: String by testProperties
+    private val testingBudgetName: String by testProperties
+    private val testingCategoryId: String by testProperties
+    private val testingTransactionId: String by testProperties
+    private val testingPayeeId: String by testProperties
+    private val testingAccoiuntId: String by testProperties
 
-    val ynabBroker: YnabBroker = YnabBrokerImpl(accessToken = loadAccessToken(ACCESS_TOKEN_PATH))
+    val ynabBroker: YnabBroker = YnabBrokerImpl(accessToken)
 
     @Test
-    fun testGetBudgetsPartiallyLoaded() {
+    fun `Test getting budgets from YNAB`() {
         val budgets = ynabBroker.getBudgetsPartiallyLoaded()
 
         assertNotEmpty(budgets)
 
-        for(budget in budgets) {
+        for (budget in budgets) {
             assertNotEmpty(budget.name)
             assertNotEmpty(budget.ynabId)
             assertNotEmpty(budget.lastModifiedDate)
         }
-        for(budget in budgets) {
+        for (budget in budgets) {
             println(budget.name + " " + budget.ynabId + " " + budget.lastModifiedDate)
         }
     }
 
     @Test
-    fun testGetBudgetById() {
-        val budget = ynabBroker.getBudgetById(TESTING_BUDGET_ID)
+    fun `Test getting budget by ID`() {
+        val budget = ynabBroker.getBudgetById(testingBudgetId)
 
         assertNotNull(budget)
-        assertEquals(TESTING_BUDGET_NAME, budget.name)
+        assertEquals(testingBudgetName, budget.name)
         assertNotEmpty(budget.ynabId)
         assertNotEmpty(budget.lastModifiedDate)
-        assertEquals(TESTING_BUDGET_ID, budget.ynabId)
+        assertEquals(testingBudgetId, budget.ynabId)
         assertNotEmpty(budget.budgetMonths)
 
         println(budget.getJson())
     }
 
     @Test
-    fun testGetRefreshedBudgetWhenNoChange() {
-        val budget = ynabBroker.getBudgetById(TESTING_BUDGET_ID)
+    fun `Test refreshing budget without changes`() {
+        val budget = ynabBroker.getBudgetById(testingBudgetId)
 
         val budgetRefreshed = ynabBroker.getRefreshedBudget(budget)
 
@@ -64,12 +66,11 @@ class YnabBrokerTest {
     }
 
     @Test
-    fun testGetRefreshedBudgetWhenNewTransaction() {
-        val budget = ynabBroker.getBudgetById(TESTING_BUDGET_ID)
+    fun `Test refreshing budget with new transactions`() {
+        val budget = ynabBroker.getBudgetById(testingBudgetId)
 
         // add new transaction via api
-        var ynabTransaction = YnabTransaction()
-        ynabTransaction = ynabBroker.createTransaction(TESTING_BUDGET_ID, ynabTransaction);
+        ynabBroker.createTransaction(testingBudgetId, YnabTransaction())
 
         val budgetRefreshed = ynabBroker.getRefreshedBudget(budget)
 
@@ -77,100 +78,117 @@ class YnabBrokerTest {
     }
 
     @Test
-    fun testGetBudgetByName() {
-        val budget = ynabBroker.getBudgetByName(TESTING_BUDGET_NAME)
+    fun `Test getting budget by name`() {
+        val budget = ynabBroker.getBudgetByName(testingBudgetName)
 
+        // TODO: Add assertion
         println(budget.getJson())
     }
 
     @Test
-    fun testGetCategoryHistory() {
-        val categoryHistory = ynabBroker.getCategoryHistory(TESTING_BUDGET_ID, TESTING_CATEGORY_ID)
+    fun `Test getting category history`() {
+        val categoryHistory = ynabBroker.getCategoryHistory(testingBudgetId, testingCategoryId)
 
+        // TODO: Add assertion
         println()
         println(categoryHistory.name)
-        for(item in categoryHistory.items) {
+        for (item in categoryHistory.items) {
             println(item.date + ": " + item.activity)
         }
     }
 
     @Test
-    fun testGetOverBudgetCategories() {
-        val categoriesOverBudget = ynabBroker.getOverSpentCategories(TESTING_BUDGET_ID, "2018-06")
+    fun `Test getting over-spent categories`() {
+        val categoriesOverBudget = ynabBroker.getOverSpentCategories(testingBudgetId, "2018-06")
 
         assertEquals(1, categoriesOverBudget.size)
 
-        for(categoryOverBudget in categoriesOverBudget) {
+        for (categoryOverBudget in categoriesOverBudget) {
             println(categoryOverBudget.getJson())
         }
     }
 
     @Test
-    fun testGetTransactionsByMemo() {
-        val trasactions = ynabBroker.getTransactionsByMemo(TESTING_BUDGET_ID, "ashley")
+    fun `Test getting transaction by memo`() {
+        val transactions = ynabBroker.getTransactionsByMemo(testingBudgetId, "ashley")
 
-        for(transaction in trasactions) {
+        // TODO: Add assertion
+
+        for (transaction in transactions) {
             println(transaction.getJson())
         }
     }
 
     @Test
-    fun testGetTransactions() {
-        val transactions = ynabBroker.getTransactions(TESTING_BUDGET_ID)
+    fun `Test getting transactions`() {
+        val transactions = ynabBroker.getTransactions(testingBudgetId)
 
-        for(transaction in transactions) {
+        // TODO: Add assertion
+
+        for (transaction in transactions) {
             println(transaction.getJson())
         }
     }
 
     @Test
-    fun testGetTransaction() {
-        val transaction = ynabBroker.getTransaction(TESTING_BUDGET_ID, TESTING_TRANSACTION_ID)
+    fun `Test getting transaction by ID`() {
+        val transaction = ynabBroker.getTransaction(testingBudgetId, testingTransactionId)
         println(transaction.getJson())
+        // TODO: Add assertion
     }
 
     @Test
-    fun testCreateTransaction() {
-        var transaction = ynabBroker.getTransaction(TESTING_BUDGET_ID, TESTING_TRANSACTION_ID)
-        transaction = ynabBroker.createTransaction( TESTING_BUDGET_ID, transaction)
+    fun `Test creating transaction`() {
+        var transaction = ynabBroker.getTransaction(testingBudgetId, testingTransactionId)
+        transaction = ynabBroker.createTransaction(testingBudgetId, transaction)
 
-        print( transaction )
+        // TODO: Add assertion
+        print(transaction)
     }
 
     @Test
-    fun testGetAccounts() {
-        val accounts = ynabBroker.getAccounts(TESTING_BUDGET_ID)
+    fun `Test get accounts`() {
+        val accounts = ynabBroker.getAccounts(testingBudgetId)
 
-        for(account in accounts) {
+        // TODO: Add assertion
+        for (account in accounts) {
             println(account.getJson())
         }
     }
 
     @Test
-    fun testGetAccount() {
-        val account = ynabBroker.getAccount(TESTING_BUDGET_ID, TESTING_ACCOIUNT_ID)
+    fun `Test get account by ID`() {
+        val account = ynabBroker.getAccount(testingBudgetId, testingAccoiuntId)
 
         assertNotNull(account)
-        assertEquals(TESTING_ACCOIUNT_ID, account.ynabId)
+        assertEquals(testingAccoiuntId, account.ynabId)
     }
 
     @Test
-    fun testGetPayees() {
-        val payees = ynabBroker.getPayees(TESTING_BUDGET_ID)
+    fun `Test get payees`() {
+        val payees = ynabBroker.getPayees(testingBudgetId)
 
         assertNotEmpty(payees)
     }
 
     @Test
-    fun testGetPayee() {
-        val payee = ynabBroker.getPayee(TESTING_BUDGET_ID, TESTING_PAYEE_ID)
+    fun `Test get payees by ID`() {
+        val payee = ynabBroker.getPayee(testingBudgetId, testingPayeeId)
 
         assertNotNull(payee)
-        assertEquals(TESTING_PAYEE_ID, payee.ynabId)
+        assertEquals(testingPayeeId, payee.ynabId)
         assertNotEmpty(payee.name)
     }
 
-    private fun loadAccessToken(path: String): String {
-        return Yaml().loadAs( Files.newInputStream( Paths.get( path ) ), Properties::class.java ).getProperty("accessToken")
+    private fun loadTestProperties(): Properties {
+        val path = System.getenv("KYNAB_PROPS") ?: defaultTestPropertiesPath
+        println("Loading test properties from $path")
+        return Yaml().loadAs(Files.newInputStream(Paths.get(path)), Properties::class.java)
+    }
+
+    private fun checkAccessToken(token: String?): String {
+        check(token != null) { "Missing access token, \"accessToken\", in properties file." }
+        check(token != "access token here") { "Must replace access token in properties file before testing." }
+        return token
     }
 }
