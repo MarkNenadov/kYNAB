@@ -8,7 +8,44 @@ A Kotlin interface to the YNAB (You Need A Budget) API.
 
 ### Getting Started
 
-In order to begin, you must get a Personal Access Token from YNAB and then put it into config yaml (in the personal_access_token property)
+Add kYNAB as a [Gradle source dependency](https://blog.gradle.org/introducing-source-dependencies):
+
+settings.gradle
+```groovy
+sourceControl {
+    gitRepository("https://github.com/MarkNenadov/kYNAB.git") {
+        producesModule("com.pythonbyte:kYNAB")
+    }
+}
+```
+
+build.gradle
+```groovy
+implementation('com.pythonbyte:kYNAB') {
+    version {
+        branch = 'master'
+    }
+}
+```
+
+
+### Development
+
+For testing, fill out the `src/test/resources/propterties.yml` file with values matching your budget.
+You will need a [Personal Access Token](https://api.youneedabudget.com/#authentication-overview)
+
+```yaml
+# For testing, put your token here:
+accessToken: access token here
+
+# For testing, replace these testing variables with values for your budget:
+testingBudgetId: 716692c6-55db-4b79-b11d-48efa0ca1f23
+testingBudgetName: TESTING
+testingCategoryId: ed953aad-02d4-4d1f-9524-ae5af699a132
+testingTransactionId: 96cc9028-21ad-4f7f-b575-72612ceb311e
+testingPayeeId: e2f5814d-431c-47ec-8101-c3da519257f9
+testingAccoiuntId: b0b3e9ba-4f2c-44b8-91d5-27815ae86fed
+```
 
 ### The com.pythonbyte.kynab.YnabBroker API
 
