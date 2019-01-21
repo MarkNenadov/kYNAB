@@ -2,10 +2,10 @@ package com.pythonbyte.kynab.base
 
 import org.json.JSONObject
 
-class JsonObject(val wrappedJSONObject: JSONObject) {
+class JsonObject(private val wrappedJSONObject: JSONObject) {
     fun getString(key: String): String {
-        if ( isNull( key ) ) {
-            return "";
+        if (isNull(key)) {
+            return ""
         }
         return wrappedJSONObject.getString(key)
     }
@@ -17,8 +17,8 @@ class JsonObject(val wrappedJSONObject: JSONObject) {
     fun getArray(key: String): List<JsonObject> {
         val jsonObjectArray: MutableList<JsonObject> = mutableListOf()
 
-        if ( hasKey(key)) {
-            for(arrayItem in wrappedJSONObject.getJSONArray(key)) {
+        if (hasKey(key)) {
+            for (arrayItem in wrappedJSONObject.getJSONArray(key)) {
                 jsonObjectArray.add(JsonObject(arrayItem as JSONObject))
             }
         }

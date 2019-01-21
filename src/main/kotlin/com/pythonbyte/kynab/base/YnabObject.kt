@@ -10,7 +10,7 @@ open class YnabObject {
     var name = ""
 
     @JsonIgnore
-    val mapper = ObjectMapper().registerModule(KotlinModule())
+    val mapper: ObjectMapper = ObjectMapper().registerModule(KotlinModule())
 
     @JsonIgnore
     open fun getJson(): String {

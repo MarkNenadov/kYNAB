@@ -13,7 +13,8 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 class YnabBrokerTest {
-    val testProperties = loadTestProperties("src/test/resources/properties.yml")
+    val defaultTestPropertiesPath = "src/test/resources/properties.yml"
+    val testProperties = loadTestProperties()
 
     private val accessToken: String = checkAccessToken(testProperties["accessToken"] as String)
     private val testingBudgetId: String by testProperties
@@ -179,7 +180,9 @@ class YnabBrokerTest {
         assertNotEmpty(payee.name)
     }
 
-    private fun loadTestProperties(path: String): Properties {
+    private fun loadTestProperties(): Properties {
+        val path = System.getenv("KYNAB_PROPS") ?: defaultTestPropertiesPath
+        println("Loading test properties from $path")
         return Yaml().loadAs(Files.newInputStream(Paths.get(path)), Properties::class.java)
     }
 

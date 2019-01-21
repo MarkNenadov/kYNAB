@@ -10,7 +10,7 @@ class YnabBudget() : YnabObject() {
     val payees: MutableList<YnabPayee> = mutableListOf()
     val transactions: MutableList<YnabTransaction> = mutableListOf()
     var lastModifiedDate = ""
-    var serverKnowledgeNumber = 0;
+    var serverKnowledgeNumber = 0
 
     constructor(jsonObject: JsonObject) : this() {
         loadYnabId(jsonObject)
@@ -31,7 +31,7 @@ class YnabBudget() : YnabObject() {
     }
 
     private fun loadTransactions(jsonObject: JsonObject) {
-        for(transactionJsonObject in jsonObject.getArray("transactions")) {
+        for (transactionJsonObject in jsonObject.getArray("transactions")) {
             addTransaction(transactionJsonObject)
         }
     }
@@ -41,19 +41,19 @@ class YnabBudget() : YnabObject() {
     }
 
     private fun loadPayees(jsonObject: JsonObject) {
-        for(payeeJsonObject in jsonObject.getArray("payees")) {
+        for (payeeJsonObject in jsonObject.getArray("payees")) {
             payees.add(YnabPayee(payeeJsonObject))
         }
     }
 
     private fun loadAccountsList(jsonObject: JsonObject) {
-        for(accountJsonObject in jsonObject.getArray("accounts")) {
+        for (accountJsonObject in jsonObject.getArray("accounts")) {
             accounts.add(YnabAccount(accountJsonObject))
         }
     }
 
     private fun loadBudgetMonths(jsonObject: JsonObject) {
-        for(monthJsonObject in jsonObject.getArray("months")) {
+        for (monthJsonObject in jsonObject.getArray("months")) {
             addBudgetMonth(monthJsonObject)
         }
     }
@@ -65,8 +65,8 @@ class YnabBudget() : YnabObject() {
     fun getCategoriesForAllMonths(): List<YnabBudgetCategory> {
         val categories: MutableList<YnabBudgetCategory> = mutableListOf()
 
-        for(budgetMonth in budgetMonths) {
-            for(category in budgetMonth.categories) {
+        for (budgetMonth in budgetMonths) {
+            for (category in budgetMonth.categories) {
                 category.referenceBudgetMonth = budgetMonth
                 categories.add(category)
             }

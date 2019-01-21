@@ -1,3 +1,4 @@
+# !! DO NOT COMMIT YOUR ACCESS TOKEN TO GIT !!
 # For testing, put your token here:
 accessToken: access token here
 

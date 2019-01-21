@@ -31,8 +31,13 @@ implementation('com.pythonbyte:kYNAB') {
 
 ### Development
 
-For testing, fill out the `src/test/resources/propterties.yml` file with values matching your budget.
+For testing, copy the `src/test/resources/propterties.yml` file and replace the values in your new `properties.yml` file with values matching your budget (you can find IDs for your budget by running the tests).
+
+Set a `KYNAB_PROPS` environment variable to the path to your new properties file (otherwise it will use the default properties).
+
 You will need a [Personal Access Token](https://api.youneedabudget.com/#authentication-overview)
+
+**!! DO NOT COMMIT YOUR PERSONAL ACCESS TOKEN TO GIT !!**
 
 ```yaml
 # For testing, put your token here:

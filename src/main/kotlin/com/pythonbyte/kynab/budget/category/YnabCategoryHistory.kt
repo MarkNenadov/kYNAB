@@ -7,7 +7,7 @@ class YnabCategoryHistory : YnabObject() {
     val items: MutableList<YnabCategoryHistoryItem> = mutableListOf()
 
     fun addItem(date: String?, activity: Int) {
-        if(date == null) {
+        if (date == null) {
             throw Exception("Category history [$name] is missing date")
         }
 
