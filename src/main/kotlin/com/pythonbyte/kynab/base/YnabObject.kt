@@ -31,6 +31,4 @@ open class YnabObject {
     protected fun loadName(jsonObject: JsonObject) {
         name = jsonObject.getString("name")
     }
-
-
 }

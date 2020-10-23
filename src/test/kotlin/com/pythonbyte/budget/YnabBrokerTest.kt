@@ -5,7 +5,7 @@ import com.pythonbyte.kynab.YnabBrokerImpl
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import com.pythonbyte.kynab.base.assertNotEmpty
+import kotlin.test.assertNotEquals
 import com.pythonbyte.kynab.budget.YnabTransaction;
 import org.yaml.snakeyaml.Yaml
 import java.nio.file.Files
@@ -28,12 +28,13 @@ class YnabBrokerTest {
     fun testGetBudgetsPartiallyLoaded() {
         val budgets = ynabBroker.getBudgetsPartiallyLoaded()
 
-        assertNotEmpty(budgets)
+        assertNotNull(budgets)
+        assertNotEquals(0, budgets.size)
 
         for(budget in budgets) {
-            assertNotEmpty(budget.name)
-            assertNotEmpty(budget.ynabId)
-            assertNotEmpty(budget.lastModifiedDate)
+            assertNotNull(budget.name)
+            assertNotNull(budget.ynabId)
+            assertNotNull(budget.lastModifiedDate)
         }
         for(budget in budgets) {
             println(budget.name + " " + budget.ynabId + " " + budget.lastModifiedDate)
@@ -46,10 +47,11 @@ class YnabBrokerTest {
 
         assertNotNull(budget)
         assertEquals(TESTING_BUDGET_NAME, budget.name)
-        assertNotEmpty(budget.ynabId)
-        assertNotEmpty(budget.lastModifiedDate)
+        assertNotNull(budget.ynabId)
+        assertNotNull(budget.lastModifiedDate)
         assertEquals(TESTING_BUDGET_ID, budget.ynabId)
-        assertNotEmpty(budget.budgetMonths)
+        assertNotNull(budget.budgetMonths)
+        assertNotEquals(0, budget.budgetMonths.size)
 
         println(budget.getJson())
     }
@@ -158,7 +160,8 @@ class YnabBrokerTest {
     fun testGetPayees() {
         val payees = ynabBroker.getPayees(TESTING_BUDGET_ID)
 
-        assertNotEmpty(payees)
+        assertNotNull(payees)
+        assertNotEquals(0, payees.size)
     }
 
     @Test
@@ -167,7 +170,7 @@ class YnabBrokerTest {
 
         assertNotNull(payee)
         assertEquals(TESTING_PAYEE_ID, payee.ynabId)
-        assertNotEmpty(payee.name)
+        assertNotNull(payee.name)
     }
 
     private fun loadAccessToken(path: String): String {

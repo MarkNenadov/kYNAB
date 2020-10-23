@@ -6,7 +6,7 @@ import khttp.post
 class YnabHttp {
     companion object {
         fun get(urlBase: String, serverKnowledgeNumber: Int = 0): YnabResponse {
-            val url = urlBase + "&last_knowledge_of_server=$serverKnowledgeNumber"
+            val url = "$urlBase&last_knowledge_of_server=$serverKnowledgeNumber"
             val response = YnabResponse(get(url = url))
 
             if(response.hasError()) {
