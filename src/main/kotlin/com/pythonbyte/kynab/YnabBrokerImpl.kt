@@ -13,15 +13,15 @@ class YnabBrokerImpl(private val accessToken:String, val baseUrl:String = "https
     override fun getAccounts(budgetYnabId: String): MutableList<YnabAccount> {
         val result = mutableListOf<YnabAccount>()
 
-        val responseData = YnabHttp.get(getUrl("budgets/" + budgetYnabId + "/accounts")).data
+        val responseData = YnabHttp.get(getUrl("budgets/$budgetYnabId/accounts")).data
 
         responseData?.getArray("accounts")?.forEach { result.add(YnabAccount(it)) }
 
-        return result;
+        return result
     }
 
     override fun getAccount(budgetYnabId: String, accountYnabId: String): YnabAccount {
-        val responseData = YnabHttp.get(getUrl("budgets/" + budgetYnabId + "/accounts/" + accountYnabId)).data
+        val responseData = YnabHttp.get(getUrl("budgets/$budgetYnabId/accounts/$accountYnabId")).data
 
         if(responseData != null) {
             return YnabAccount(responseData.getObject("account"))
@@ -41,7 +41,7 @@ class YnabBrokerImpl(private val accessToken:String, val baseUrl:String = "https
     }
 
     override fun getBudgetById(ynabId: String): YnabBudget {
-        val responseData: JsonObject? = YnabHttp.get(getUrl("budgets/" + ynabId)).data
+        val responseData: JsonObject? = YnabHttp.get(getUrl("budgets/$ynabId")).data
 
         if(responseData == null) {
             throw Exception("Can't find data for com.pythonbyte.budget")
@@ -58,7 +58,7 @@ class YnabBrokerImpl(private val accessToken:String, val baseUrl:String = "https
             throw Exception("YnabBudget object is missing delta information (serverKnowledgeNumber)")
         }
 
-        val responseData: JsonObject? = YnabHttp.get(getUrl("budgets/" + staleBudget.ynabId ), staleBudget.serverKnowledgeNumber).data
+        val responseData: JsonObject? = YnabHttp.get(getUrl("budgets/${staleBudget.ynabId}" ), staleBudget.serverKnowledgeNumber).data
 
         if(responseData == null) {
             throw Exception("Can't find data for com.pythonbyte.budget")
@@ -69,13 +69,13 @@ class YnabBrokerImpl(private val accessToken:String, val baseUrl:String = "https
 
         val deltaBudget = YnabBudget(result, serverKnowledgeNumber)
 
-        staleBudget.refreshFromDeltaBudget(deltaBudget);
+        staleBudget.refreshFromDeltaBudget(deltaBudget)
 
-        return staleBudget;
+        return staleBudget
     }
 
     override fun getBudgetByName(name: String): YnabBudget {
-        var budgetId = "";
+        var budgetId = ""
         for(budgetSummary in getBudgetsPartiallyLoaded()) {
             if(budgetSummary.name == name) {
                 budgetId = budgetSummary.ynabId
@@ -101,7 +101,7 @@ class YnabBrokerImpl(private val accessToken:String, val baseUrl:String = "https
     }
 
     private fun getMonthAsFullDate(month: String): String {
-        return month + "-01"
+        return "$month-01"
     }
 
     override fun getCategoryHistory(budgetYnabId: String, categoryYnabId: String): YnabCategoryHistory {
@@ -126,15 +126,15 @@ class YnabBrokerImpl(private val accessToken:String, val baseUrl:String = "https
     override fun getTransactions(budgetYnabId: String): List<YnabTransaction> {
         val result = mutableListOf<YnabTransaction>()
 
-        val responseData = YnabHttp.get(getUrl("budgets/" + budgetYnabId + "/transactions")).data
+        val responseData = YnabHttp.get(getUrl("budgets/$budgetYnabId/transactions")).data
 
         responseData?.getArray("transactions")?.forEach { result.add(YnabTransaction(it)) }
 
-        return result;
+        return result
     }
 
     override fun getTransaction(budgetYnabId: String, transactionYnabId: String): YnabTransaction {
-        val responseData = YnabHttp.get(getUrl("budgets/" + budgetYnabId + "/transactions/" + transactionYnabId)).data
+        val responseData = YnabHttp.get(getUrl("budgets/$budgetYnabId/transactions/$transactionYnabId")).data
 
         if(responseData != null) {
             return YnabTransaction(responseData.getObject("transaction"))
@@ -172,7 +172,7 @@ class YnabBrokerImpl(private val accessToken:String, val baseUrl:String = "https
     }
 
     override fun createTransaction(ynabBudgetId: String, transaction: YnabTransaction): YnabTransaction {
-        val endpointName = "budgets/" + ynabBudgetId + "/transactions"
+        val endpointName = "budgets/$ynabBudgetId/transactions"
         val postData = transaction.getJsonForCreate()
 
         var responseData = YnabHttp.post(getUrl(endpointName), postData).data
@@ -183,28 +183,24 @@ class YnabBrokerImpl(private val accessToken:String, val baseUrl:String = "https
     override fun getPayees(budgetYnabId: String): List<YnabPayee> {
         val result = mutableListOf<YnabPayee>()
 
-        val responseData = YnabHttp.get(getUrl("budgets/" + budgetYnabId + "/payees")).data
+        val responseData = YnabHttp.get(getUrl("budgets/$budgetYnabId/payees")).data
 
         responseData?.getArray("payees")?.forEach { result.add(YnabPayee(it)) }
 
-        return result;
+        return result
     }
 
     override fun getPayee(budgetYnabId: String, payeeYnabId: String): YnabPayee {
-        val responseData = YnabHttp.get(getUrl("budgets/" + budgetYnabId + "/payees/" + payeeYnabId)).data
+        val responseData = YnabHttp.get(getUrl("budgets/$budgetYnabId/payees/$payeeYnabId")).data
 
-        if(responseData != null) {
-            return YnabPayee(responseData.getObject("payee"))
+        return if(responseData != null) {
+            YnabPayee(responseData.getObject("payee"))
         } else {
             throw Exception("Payee [$payeeYnabId] not found.")
         }
     }
 
-    fun getUrl( endpointName : String ) : String {
-        return getEndpointPath( endpointName ) + "?access_token=" + accessToken
-    }
+    fun getUrl( endpointName : String ) = getEndpointPath( endpointName ) + "?access_token=$accessToken"
 
-    fun getEndpointPath (endpointName: String) = baseUrl + "/" + endpointName
-
-
+    fun getEndpointPath (endpointName: String) = "$baseUrl/$endpointName"
 }
