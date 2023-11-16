@@ -4,7 +4,7 @@ import org.json.JSONObject
 
 class JsonObject(val wrappedJSONObject: JSONObject) {
     fun getString(key: String): String {
-        return if ( isNull( key ) ) {
+        return if (isNull(key)) {
             ""
         } else {
             return wrappedJSONObject.getString(key)
@@ -17,7 +17,7 @@ class JsonObject(val wrappedJSONObject: JSONObject) {
         val jsonObjectArray: MutableList<JsonObject> = mutableListOf()
 
         if (hasKey(key)) {
-            for(arrayItem in wrappedJSONObject.getJSONArray(key)) {
+            for (arrayItem in wrappedJSONObject.getJSONArray(key)) {
                 jsonObjectArray.add(JsonObject(arrayItem as JSONObject))
             }
         }

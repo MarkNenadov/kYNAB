@@ -9,7 +9,7 @@ class YnabHttp {
             val url = "$urlBase&last_knowledge_of_server=$serverKnowledgeNumber"
             val response = YnabResponse(get(url = url))
 
-            return if(response.hasError()) {
+            return if (response.hasError()) {
                 print(response.errors[0].toString())
                 throw Exception("Error connecting to YNAB $urlBase ${response.errors[0]}]")
             } else {
@@ -21,13 +21,12 @@ class YnabHttp {
             print(baseUrl)
             val response = YnabResponse(post(url = baseUrl, params = mapOf("transaction" to postData)))
 
-            return if(response.hasError()) {
+            return if (response.hasError()) {
                 print(response.errors[0].toString())
                 throw Exception("Error connecting to YNAB $baseUrl ${response.errors[0]}]")
             } else {
                 response
             }
         }
-
     }
 }

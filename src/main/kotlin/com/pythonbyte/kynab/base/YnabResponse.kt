@@ -16,7 +16,6 @@ class YnabResponse(response: Response) {
         } else {
             throw Exception("This strange. YnabResponse has neither an error nor data, I don't understand what is going on.")
         }
-
     }
 
     fun hasError() = this.errors.size > 0

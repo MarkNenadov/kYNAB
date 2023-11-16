@@ -2,15 +2,15 @@ package com.pythonbyte.budget
 
 import com.pythonbyte.kynab.YnabBroker
 import com.pythonbyte.kynab.YnabBrokerImpl
+import com.pythonbyte.kynab.budget.YnabTransaction
 import org.junit.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNotEquals
-import com.pythonbyte.kynab.budget.YnabTransaction;
 import org.yaml.snakeyaml.Yaml
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
+import kotlin.test.assertNotNull
 
 class YnabBrokerTest {
     private val ACCESS_TOKEN_PATH = "src/main/resources/access_token.yaml"
@@ -31,12 +31,12 @@ class YnabBrokerTest {
         assertNotNull(budgets)
         assertNotEquals(0, budgets.size)
 
-        for(budget in budgets) {
+        for (budget in budgets) {
             assertNotNull(budget.name)
             assertNotNull(budget.ynabId)
             assertNotNull(budget.lastModifiedDate)
         }
-        for(budget in budgets) {
+        for (budget in budgets) {
             println(budget.name + " " + budget.ynabId + " " + budget.lastModifiedDate)
         }
     }
@@ -71,7 +71,7 @@ class YnabBrokerTest {
 
         // add new transaction via api
         var ynabTransaction = YnabTransaction()
-        ynabTransaction = ynabBroker.createTransaction(TESTING_BUDGET_ID, ynabTransaction);
+        ynabTransaction = ynabBroker.createTransaction(TESTING_BUDGET_ID, ynabTransaction)
 
         val budgetRefreshed = ynabBroker.getRefreshedBudget(budget)
 
@@ -91,7 +91,7 @@ class YnabBrokerTest {
 
         println()
         println(categoryHistory.name)
-        for(item in categoryHistory.items) {
+        for (item in categoryHistory.items) {
             println(item.date + ": " + item.activity)
         }
     }
@@ -102,7 +102,7 @@ class YnabBrokerTest {
 
         assertEquals(1, categoriesOverBudget.size)
 
-        for(categoryOverBudget in categoriesOverBudget) {
+        for (categoryOverBudget in categoriesOverBudget) {
             println(categoryOverBudget.getJson())
         }
     }
@@ -111,7 +111,7 @@ class YnabBrokerTest {
     fun testGetTransactionsByMemo() {
         val trasactions = ynabBroker.getTransactionsByMemo(TESTING_BUDGET_ID, "ashley")
 
-        for(transaction in trasactions) {
+        for (transaction in trasactions) {
             println(transaction.getJson())
         }
     }
@@ -120,7 +120,7 @@ class YnabBrokerTest {
     fun testGetTransactions() {
         val transactions = ynabBroker.getTransactions(TESTING_BUDGET_ID)
 
-        for(transaction in transactions) {
+        for (transaction in transactions) {
             println(transaction.getJson())
         }
     }
@@ -134,16 +134,16 @@ class YnabBrokerTest {
     @Test
     fun testCreateTransaction() {
         var transaction = ynabBroker.getTransaction(TESTING_BUDGET_ID, TESTING_TRANSACTION_ID)
-        transaction = ynabBroker.createTransaction( TESTING_BUDGET_ID, transaction)
+        transaction = ynabBroker.createTransaction(TESTING_BUDGET_ID, transaction)
 
-        print( transaction )
+        print(transaction)
     }
 
     @Test
     fun testGetAccounts() {
         val accounts = ynabBroker.getAccounts(TESTING_BUDGET_ID)
 
-        for(account in accounts) {
+        for (account in accounts) {
             println(account.getJson())
         }
     }
@@ -174,6 +174,6 @@ class YnabBrokerTest {
     }
 
     private fun loadAccessToken(path: String): String {
-        return Yaml().loadAs( Files.newInputStream( Paths.get( path ) ), Properties::class.java ).getProperty("accessToken")
+        return Yaml().loadAs(Files.newInputStream(Paths.get(path)), Properties::class.java).getProperty("accessToken")
     }
 }

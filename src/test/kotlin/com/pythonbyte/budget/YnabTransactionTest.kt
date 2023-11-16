@@ -21,5 +21,4 @@ class YnabTransactionTest {
         val newTransaction = ynabTransaction.createFromJson(jsonValue) as YnabTransaction
         assertEquals(ynabTransaction.getJson(), newTransaction.getJson())
     }
-
 }
