@@ -13,14 +13,10 @@ open class YnabObject {
     val mapper = ObjectMapper().registerModule(KotlinModule())
 
     @JsonIgnore
-    open fun getJson(): String {
-        return mapper.writeValueAsString(this)
-    }
+    open fun getJson() = mapper.writeValueAsString(this)
 
     @JsonIgnore
-    fun createFromJson(jsonValue: String): YnabObject {
-        return mapper.readValue(jsonValue)
-    }
+    fun createFromJson(jsonValue: String): YnabObject = mapper.readValue(jsonValue)
 
     @JsonIgnore
     protected fun loadYnabId(jsonObject: JsonObject) {

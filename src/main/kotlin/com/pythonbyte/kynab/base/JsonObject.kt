@@ -4,20 +4,19 @@ import org.json.JSONObject
 
 class JsonObject(val wrappedJSONObject: JSONObject) {
     fun getString(key: String): String {
-        if ( isNull( key ) ) {
-            return "";
+        return if ( isNull( key ) ) {
+            ""
+        } else {
+            return wrappedJSONObject.getString(key)
         }
-        return wrappedJSONObject.getString(key)
     }
 
-    fun getInt(key: String): Int {
-        return wrappedJSONObject.getInt(key)
-    }
+    fun getInt(key: String) = wrappedJSONObject.getInt(key)
 
     fun getArray(key: String): List<JsonObject> {
         val jsonObjectArray: MutableList<JsonObject> = mutableListOf()
 
-        if ( hasKey(key)) {
+        if (hasKey(key)) {
             for(arrayItem in wrappedJSONObject.getJSONArray(key)) {
                 jsonObjectArray.add(JsonObject(arrayItem as JSONObject))
             }
@@ -26,23 +25,13 @@ class JsonObject(val wrappedJSONObject: JSONObject) {
         return jsonObjectArray
     }
 
-    fun isNull(key: String): Boolean {
-        return wrappedJSONObject.isNull(key)
-    }
+    fun isNull(key: String) = wrappedJSONObject.isNull(key)
 
-    fun getObject(key: String): JsonObject {
-        return JsonObject(wrappedJSONObject.getJSONObject(key))
-    }
+    fun getObject(key: String) = JsonObject(wrappedJSONObject.getJSONObject(key))
 
-    fun hasKey(key: String): Boolean {
-        return wrappedJSONObject.has(key)
-    }
+    fun hasKey(key: String) = wrappedJSONObject.has(key)
 
-    override fun toString(): String {
-        return wrappedJSONObject.toString()
-    }
+    override fun toString() = wrappedJSONObject.toString()
 
-    fun getBoolean(key: String): Boolean {
-        return wrappedJSONObject.getBoolean(key)
-    }
+    fun getBoolean(key: String) = wrappedJSONObject.getBoolean(key)
 }
