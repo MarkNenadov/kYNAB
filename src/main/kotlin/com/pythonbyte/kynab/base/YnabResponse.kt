@@ -19,7 +19,5 @@ class YnabResponse(response: Response) {
 
     }
 
-    fun hasError(): Boolean {
-        return this.errors.size > 0
-    }
+    fun hasError() = this.errors.size > 0
 }
